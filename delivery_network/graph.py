@@ -70,7 +70,7 @@ class Graph:
     
 
     def get_path_with_power(self, src, dest, power):
-        visited = {node:False for node in self.nodes}
+        visited = {node:False for node in self.nodes} 
         def look_for_path(node, path):
             if node==dest:
                 return path
@@ -83,6 +83,35 @@ class Graph:
                         return(result)
             return None
         return look_for_path(src,[src])
+    
+    import heapq
+
+def get_shortest_path_with_power(self, src, dest, power):
+    visited = {node: False for node in self.nodes}
+    distances = {node: float('inf') for node in self.nodes}
+    distances[src] = 0
+    previous = {node: None for node in self.nodes}
+    queue = [(0, src)]
+    while queue:
+        (dist, current_node) = heapq.heappop(queue)
+        if current_node == dest:
+            path = []
+            while current_node is not None:
+                path.insert(0, current_node)
+                current_node = previous[current_node]
+            return path
+        if visited[current_node]:
+            continue
+        visited[current_node] = True
+        for neighbor, power_min, edge_distance in self.graph[current_node]:
+            if not visited[neighbor] and power_min <= power:
+                new_distance = distances[current_node] + edge_distance
+                if new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+                    previous[neighbor] = current_node
+                    heapq.heappush(queue, (new_distance, neighbor))
+    return None
+
     
 
     def connected_components(self):
@@ -114,32 +143,9 @@ class Graph:
         return set(map(frozenset, self.connected_components()))
     
     def min_power(self, src, dest):
-        """
-        Should return path, min_power. 
-        """
-        raise NotImplementedError
-
+        return 'sophie <3'
 
 def graph_from_file(filename):
-    """
-    Reads a text file and returns the graph as an object of the Graph class.
-
-    The file should have the following format: 
-        The first line of the file is 'n m'
-        The next m lines have 'node1 node2 power_min dist' or 'node1 node2 power_min' (if dist is missing, it will be set to 1 by default)
-        The nodes (node1, node2) should be named 1..n
-        All values are integers.
-
-    Parameters: 
-    -----------
-    filename: str
-        The name of the file
-
-    Outputs: 
-    -----------
-    g: Graph
-        An object of the class Graph with the graph from file_name.
-    """
     with open(filename, "r") as file:
         n, m = map(int, file.readline().split())
         g = Graph(range(1, n+1))
@@ -154,3 +160,6 @@ def graph_from_file(filename):
             else:
                 raise Exception("Format incorrect")
     return g
+
+import graphviz 
+import heapq
