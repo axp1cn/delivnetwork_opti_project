@@ -74,6 +74,25 @@ class Graph:
     
 
     def connected_components(self):
+        con_comps =[]
+        visited = {node:False for node in self.nodes}
+
+        def dfs(node):
+            component = [node]
+            for neighbor in self.graph[node]:
+                neighbor = neighbor[0]
+                if not visited[neighbor]:
+                    visited[neighbor] = True
+                    component += dfs(neighbor)
+            return component
+
+        for node in seld.nodes:
+            if not visited[node]:
+                visited[node] = True
+                con_comps.append(dfs(node))
+        
+        return con_comps
+
         raise NotImplementedError
 
 
