@@ -112,6 +112,7 @@ class Graph:
                         return(result)
             return None
         return look_for_path(src,[src])
+    #la complexité en temps est de l'ordre de O(n²) dans le pire des cas (graphe connecté) avec n le nombre de noeud
 
     def get_shortest_path_with_power(self, src, dest, power):
         visited = []
@@ -139,6 +140,7 @@ class Graph:
             path.insert(0, current_node)
             current_node = previous[current_node]
         return path
+    #complexité en temps de n²ln(n) avec n le nombre de noeud dans le pire des cas(graphe connecté)
     
     def min_power(self, src, dest):
         # Trouver la puissance maximale du graphe
@@ -158,7 +160,7 @@ class Graph:
                 lower_bound = mid + 1
         # Retourner le chemin et la puissance minimale requise
         return (best_path, lower_bound)
-    
+    #complexité de n²ln²(n) dans le pire des cas (graphe connecté)
 def graph_from_file(filename):
     with open(filename, "r") as file:
         n, m = map(int, file.readline().split())
