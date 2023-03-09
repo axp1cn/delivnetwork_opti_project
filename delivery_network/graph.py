@@ -83,34 +83,32 @@ class Graph:
                         return(result)
             return None
         return look_for_path(src,[src])
-    
-    import heapq
 
-def get_shortest_path_with_power(self, src, dest, power):
-    visited = {node: False for node in self.nodes}
-    distances = {node: float('inf') for node in self.nodes}
-    distances[src] = 0
-    previous = {node: None for node in self.nodes}
-    queue = [(0, src)]
-    while queue:
-        (dist, current_node) = heapq.heappop(queue)
-        if current_node == dest:
-            path = []
-            while current_node is not None:
-                path.insert(0, current_node)
-                current_node = previous[current_node]
-            return path
-        if visited[current_node]:
-            continue
-        visited[current_node] = True
-        for neighbor, power_min, edge_distance in self.graph[current_node]:
-            if not visited[neighbor] and power_min <= power:
-                new_distance = distances[current_node] + edge_distance
-                if new_distance < distances[neighbor]:
-                    distances[neighbor] = new_distance
-                    previous[neighbor] = current_node
-                    heapq.heappush(queue, (new_distance, neighbor))
-    return None
+    def get_shortest_path_with_power(self, src, dest, power):
+        visited = {node: False for node in self.nodes}
+        distances = {node: float('inf') for node in self.nodes}
+        distances[src] = 0
+        previous = {node: None for node in self.nodes}
+        queue = [(0, src)]
+        while queue:
+            (dist, current_node) = heapq.heappop(queue)
+            if current_node == dest:
+                path = []
+                while current_node is not None:
+                    path.insert(0, current_node)
+                    current_node = previous[current_node]
+                return path
+            if visited[current_node]:
+                continue
+            visited[current_node] = True
+            for neighbor, power_min, edge_distance in self.graph[current_node]:
+                if not visited[neighbor] and power_min <= power:
+                    new_distance = distances[current_node] + edge_distance
+                    if new_distance < distances[neighbor]:
+                        distances[neighbor] = new_distance
+                        previous[neighbor] = current_node
+                        heapq.heappush(queue, (new_distance, neighbor))
+        return None
 
     
 
