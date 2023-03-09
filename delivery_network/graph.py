@@ -85,30 +85,31 @@ class Graph:
         return look_for_path(src,[src])
 
     def get_shortest_path_with_power(self, src, dest, power):
-        visited = {node: False for node in self.nodes}
+        visited = []
         distances = {node: float('inf') for node in self.nodes}
         distances[src] = 0
         previous = {node: None for node in self.nodes}
-        queue = [(0, src)]
-        while queue:
-            (dist, current_node) = heapq.heappop(queue)
-            if current_node == dest:
-                path = []
-                while current_node is not None:
-                    path.insert(0, current_node)
-                    current_node = previous[current_node]
-                return path
-            if visited[current_node]:
-                continue
-            visited[current_node] = True
+        current_node = src
+        while current_node != dest:
+            if current_node is None:
+                return None
+            visited.append(current_node)
             for neighbor, power_min, edge_distance in self.graph[current_node]:
-                if not visited[neighbor] and power_min <= power:
-                    new_distance = distances[current_node] + edge_distance
-                    if new_distance < distances[neighbor]:
-                        distances[neighbor] = new_distance
-                        previous[neighbor] = current_node
-                        heapq.heappush(queue, (new_distance, neighbor))
-        return None
+                if power_min > power or neighbor in visited:
+                    continue
+                new_distance = distances[current_node] + edge_distance
+                if new_distance < distances[neighbor]:
+                    distances[neighbor] = new_distance
+                    previous[neighbor] = current_node
+            unvisited = {node: distances[node] for node in distances if node not in visited}
+            if not unvisited:
+                return None
+            current_node = min(unvisited, key=unvisited.get)
+        path = []
+        while current_node is not None:
+            path.insert(0, current_node)
+            current_node = previous[current_node]
+        return path
 
     
 
@@ -160,4 +161,3 @@ def graph_from_file(filename):
     return g
 
 import graphviz 
-import heapq
