@@ -86,7 +86,7 @@ class Graph:
                     component += dfs(neighbor)
             return component
 
-        for node in seld.nodes:
+        for node in self.nodes:
             if not visited[node]:
                 visited[node] = True
                 con_comps.append(dfs(node))
