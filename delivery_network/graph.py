@@ -1,3 +1,5 @@
+import graphviz
+
 class Graph:
     """
     A class representing graphs as adjacency lists and implementing various algorithms on the graphs. Graphs in the class are not oriented. 
@@ -112,7 +114,6 @@ class Graph:
                         return(result)
             return None
         return look_for_path(src,[src])
-    #la complexité en temps est de l'ordre de O(n²) dans le pire des cas (graphe connecté) avec n le nombre de noeud
 
     def get_shortest_path_with_power(self, src, dest, power):
         visited = []
@@ -139,8 +140,7 @@ class Graph:
         while current_node is not None:
             path.insert(0, current_node)
             current_node = previous[current_node]
-        return path
-    #complexité en temps de n²ln(n) avec n le nombre de noeud dans le pire des cas(graphe connecté)
+        return path if path != [dest] else None
     
     def min_power(self, src, dest):
         # Trouver la puissance maximale du graphe
@@ -160,7 +160,30 @@ class Graph:
                 lower_bound = mid + 1
         # Retourner le chemin et la puissance minimale requise
         return (best_path, lower_bound)
-    #complexité de n²ln²(n) dans le pire des cas (graphe connecté)
+   
+    def graphic_representation(self, src, dest, power):
+
+        repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
+        path_min_power = self.get_shortest_path_with_power(src, dest, power)
+        graph = self.graph
+
+        for node, neighbors in graph.items():
+            repr.node(str(node), style = "filled", color = "lightblue")
+            for neighbor, power_min, dist in neighbors:
+                    repr.edge(str(node), str(neighbor), label="D : " + str(dist) + "\nP_min : " + str(power_min))
+
+        if path_min_power != None:
+            for node in path_min_power :
+                repr.node(str(node), style = "filled", color = "red")
+            for i in range(0, len(path_min_power)-1):
+                node1 = path_min_power[i]
+                node2 = path_min_power[i+1]
+
+                repr.edge(str(node1), str(node2), label="Shortest path", color ="red", fontcolor ="red")
+
+        repr.view()
+        return None
+
 def graph_from_file(filename):
     with open(filename, "r") as file:
         n, m = map(int, file.readline().split())
@@ -176,3 +199,4 @@ def graph_from_file(filename):
             else:
                 raise Exception("Format incorrect")
     return g
+
