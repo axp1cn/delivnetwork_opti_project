@@ -187,7 +187,7 @@ class Graph:
 
         repr.view()
         return None
-
+"""
 def graph_from_file(filename):
     with open(filename, "r") as file:
         n, m = map(int, file.readline().split())
@@ -200,6 +200,24 @@ def graph_from_file(filename):
             elif len(edge) == 4:
                 node1, node2, power_min, dist = edge
                 g.add_edge(node1, node2, power_min, dist)
+            else:
+                raise Exception("Format incorrect")
+    return g
+"""
+def graph_from_file(filename):
+    with open(filename, "r") as file:
+        lines = open(filename, "r").readlines()
+        lines = [i for i in lines]
+        line1 = lines.pop(0).split()
+        g = Graph([range(1,int(line1[0])+1)])
+        for i in range(len(lines)):
+            lines[i] = lines[i].split()
+            if len(lines[i]) == 3:
+                node1, node2, power_min = lines[i]
+                g.add_edge(int(node1), int(node2), int(power_min)) # will add dist=1 by default
+            elif len(lines[i]) == 4:
+                node1, node2, power_min, dist = lines[i]
+                g.add_edge(int(node1), int(node2), int(power_min), int(dist))
             else:
                 raise Exception("Format incorrect")
     return g
