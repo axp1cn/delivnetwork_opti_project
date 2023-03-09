@@ -67,8 +67,37 @@ class Graph:
         self.graph[node1].append((node2, power_min, dist))
         self.graph[node2].append((node1, power_min, dist))
         self.nb_edges += 1
-    
 
+
+
+    def connected_components(self):
+        con_comps =[]
+        visited = {node:False for node in self.nodes}
+
+        def dfs(node):
+            component = [node]
+            for neighbor in self.graph[node]:
+                neighbor = neighbor[0]
+                if not visited[neighbor]:
+                    visited[neighbor] = True
+                    component += dfs(neighbor)
+            return component
+
+        for node in self.nodes:
+            if not visited[node]:
+                visited[node] = True
+                con_comps.append(dfs(node))
+        
+        return con_comps
+
+
+    def connected_components_set(self):
+        """
+        The result should be a set of frozensets (one per component), 
+        For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
+        """
+        return set(map(frozenset, self.connected_components()))
+    
     def get_path_with_power(self, src, dest, power):
         visited = {node:False for node in self.nodes} 
         def look_for_path(node, path):
@@ -110,40 +139,26 @@ class Graph:
             path.insert(0, current_node)
             current_node = previous[current_node]
         return path
-
-    
-
-    def connected_components(self):
-        con_comps =[]
-        visited = {node:False for node in self.nodes}
-
-        def dfs(node):
-            component = [node]
-            for neighbor in self.graph[node]:
-                neighbor = neighbor[0]
-                if not visited[neighbor]:
-                    visited[neighbor] = True
-                    component += dfs(neighbor)
-            return component
-
-        for node in self.nodes:
-            if not visited[node]:
-                visited[node] = True
-                con_comps.append(dfs(node))
-        
-        return con_comps
-
-
-    def connected_components_set(self):
-        """
-        The result should be a set of frozensets (one per component), 
-        For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
-        """
-        return set(map(frozenset, self.connected_components()))
     
     def min_power(self, src, dest):
-        return 'sophie <3'
-
+        # Trouver la puissance maximale du graphe
+        max_puissance = max([edge[1] for node in self.nodes for edge in self.graph[node]])
+        # Initialiser les bornes inférieure et supérieure de la recherche binaire
+        lower_bound = 0
+        upper_bound = max_puissance
+        best_path = None
+        # Recherche binaire pour trouver la puissance minimale requise
+        while lower_bound <= upper_bound:
+            mid = (lower_bound + upper_bound) // 2
+            path = self.get_shortest_path_with_power(src, dest, mid)
+            if path is not None:
+                best_path = path
+                upper_bound = mid - 1
+            else:
+                lower_bound = mid + 1
+        # Retourner le chemin et la puissance minimale requise
+        return (best_path, lower_bound)
+    
 def graph_from_file(filename):
     with open(filename, "r") as file:
         n, m = map(int, file.readline().split())
