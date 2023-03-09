@@ -174,4 +174,3 @@ def graph_from_file(filename):
             else:
                 raise Exception("Format incorrect")
     return g
-import graphviz 
