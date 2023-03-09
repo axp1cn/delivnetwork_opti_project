@@ -93,6 +93,7 @@ class Graph:
         return con_comps
 
 
+
     def connected_components_set(self):
         """
         The result should be a set of frozensets (one per component), 
@@ -114,6 +115,7 @@ class Graph:
                         return(result)
             return None
         return look_for_path(src,[src])
+     #la complexité en temps est de l'ordre de O(n²) dans le pire des cas (graphe connecté) avec n le nombre de noeud
 
     def get_shortest_path_with_power(self, src, dest, power):
         visited = []
@@ -141,6 +143,7 @@ class Graph:
             path.insert(0, current_node)
             current_node = previous[current_node]
         return path if path != [dest] else None
+    #complexité en temps de n²ln(n) avec n le nombre de noeud dans le pire des cas(graphe connecté)
     
     def min_power(self, src, dest):
         # Trouver la puissance maximale du graphe
@@ -160,6 +163,7 @@ class Graph:
                 lower_bound = mid + 1
         # Retourner le chemin et la puissance minimale requise
         return (best_path, lower_bound)
+    #complexité de n²ln²(n) dans le pire des cas (graphe connecté)
    
     def graphic_representation(self, src, dest, power):
 
