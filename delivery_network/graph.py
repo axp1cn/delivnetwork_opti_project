@@ -71,7 +71,6 @@ class Graph:
 
     def get_path_with_power(self, src, dest, power):
         visited = {node:False for node in self.nodes}
-
         def look_for_path(node, path):
             if node==dest:
                 return path
