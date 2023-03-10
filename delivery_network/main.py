@@ -101,6 +101,7 @@ for i in range (1,11):
 for i in range (1,11):
     f = open(data_path + "routes."+str(i)+".in", "r")
     g = graph_from_file(data_path + "routes."+str(i)+".in")
+    g = kruskal(g)
     dest_path = "./input/routes."+str(i)+".out"
     y = open(dest_path, "w")
     lines = f.readlines()
