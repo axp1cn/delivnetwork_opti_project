@@ -19,5 +19,3 @@ La structure des fichiers network.x.in est la suivante :
 La structure des fichiers routes.x.in est la suivante : 
 - la première ligne contient un entier qui correspond aux nombres de trajets dans l'ensemble (T)
 - les T lignes suivantes contiennent chacune un trajet sous la forme `ville1 ville2 utilité`, où utilité est le profit acquis si le trajet correspondant est couvert. 
-# python_project_afp
-# python_project_afp
