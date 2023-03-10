@@ -7,12 +7,16 @@ file_name = "routes.1.in"
 
 g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
-print(g_mst)
+print(g)
+print(len(g.connected_components()))
+g.graphic_representation(1, 19, 1000)
+"""print(g_mst)
+g_mst.graphic_representation(1, 19, 1000)
 print(g_mst.min_power1(random.randrange(1,g_mst.nb_nodes+1), random.randrange(1,g_mst.nb_nodes+1)))
 print(g_mst.min_power1(random.randrange(1,g_mst.nb_nodes+1), random.randrange(1,g_mst.nb_nodes+1)))
-print(g_mst.min_power1(1,19))
+print(g_mst.min_power1(1,19))"""
 
-
+"""
 # Question 10 : Calcul de la vitesse d'exécution du code développé dans la séance 1, en particulier la méthode min_power
 
 for i in range (1,11):
@@ -32,8 +36,7 @@ for i in range (1,11):
     average_speed = statistics.mean(counter)
 
     print("La vitesse d'exécution moyenne de la méthode min_power pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
-
-
+"""
 
 # Question 11 : 
 """
@@ -67,7 +70,7 @@ fausse et la puissance minimale pour couvrir un trajet t dans le graphe G est é
 minimale pour couvrir ce trajet t dans le graphe A.
 """
 
-
+"""
 # Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power1
 
 for i in range (1,11):
@@ -91,3 +94,4 @@ for i in range (1,11):
     average_speed = statistics.mean(counter)
 
     print("La vitesse d'exécution moyenne de la méthode min_power1 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
+"""

@@ -1,0 +1,712 @@
+// Graphe non orienté
+strict graph {
+	1 [color=lightblue style=filled]
+	1 -- 14 [label="D : 1
+P_min : 7383" constraint=true]
+	1 -- 10 [label="D : 1
+P_min : 5856" constraint=true]
+	1 -- 16 [label="D : 1
+P_min : 1213" constraint=true]
+	1 -- 9 [label="D : 1
+P_min : 355" constraint=true]
+	1 -- 20 [label="D : 1
+P_min : 374" constraint=true]
+	1 -- 17 [label="D : 1
+P_min : 1663" constraint=true]
+	1 -- 14 [label="D : 1
+P_min : 3619" constraint=true]
+	1 -- 11 [label="D : 1
+P_min : 1296" constraint=true]
+	1 -- 9 [label="D : 1
+P_min : 5771" constraint=true]
+	1 -- 11 [label="D : 1
+P_min : 5084" constraint=true]
+	1 -- 20 [label="D : 1
+P_min : 3656" constraint=true]
+	1 -- 18 [label="D : 1
+P_min : 767" constraint=true]
+	2 [color=lightblue style=filled]
+	2 -- 17 [label="D : 1
+P_min : 4510" constraint=true]
+	2 -- 18 [label="D : 1
+P_min : 3982" constraint=true]
+	2 -- 14 [label="D : 1
+P_min : 9866" constraint=true]
+	2 -- 3 [label="D : 1
+P_min : 2030" constraint=true]
+	2 -- 3 [label="D : 1
+P_min : 4259" constraint=true]
+	2 -- 8 [label="D : 1
+P_min : 1180" constraint=true]
+	2 -- 16 [label="D : 1
+P_min : 7145" constraint=true]
+	2 -- 17 [label="D : 1
+P_min : 1001" constraint=true]
+	2 -- 5 [label="D : 1
+P_min : 3935" constraint=true]
+	2 -- 9 [label="D : 1
+P_min : 1323" constraint=true]
+	2 -- 7 [label="D : 1
+P_min : 9742" constraint=true]
+	2 -- 8 [label="D : 1
+P_min : 9309" constraint=true]
+	3 [color=lightblue style=filled]
+	3 -- 10 [label="D : 1
+P_min : 9498" constraint=true]
+	3 -- 19 [label="D : 1
+P_min : 1890" constraint=true]
+	3 -- 12 [label="D : 1
+P_min : 7970" constraint=true]
+	3 -- 11 [label="D : 1
+P_min : 266" constraint=true]
+	3 -- 9 [label="D : 1
+P_min : 742" constraint=true]
+	3 -- 7 [label="D : 1
+P_min : 9437" constraint=true]
+	3 -- 11 [label="D : 1
+P_min : 1962" constraint=true]
+	3 -- 10 [label="D : 1
+P_min : 6065" constraint=true]
+	3 -- 2 [label="D : 1
+P_min : 2030" constraint=true]
+	3 -- 2 [label="D : 1
+P_min : 4259" constraint=true]
+	3 -- 20 [label="D : 1
+P_min : 7504" constraint=true]
+	3 -- 6 [label="D : 1
+P_min : 4602" constraint=true]
+	3 -- 12 [label="D : 1
+P_min : 4717" constraint=true]
+	3 -- 14 [label="D : 1
+P_min : 6358" constraint=true]
+	4 [color=lightblue style=filled]
+	4 -- 15 [label="D : 1
+P_min : 5314" constraint=true]
+	4 -- 19 [label="D : 1
+P_min : 3120" constraint=true]
+	4 -- 19 [label="D : 1
+P_min : 9403" constraint=true]
+	4 -- 7 [label="D : 1
+P_min : 1654" constraint=true]
+	4 -- 5 [label="D : 1
+P_min : 5875" constraint=true]
+	4 -- 5 [label="D : 1
+P_min : 9778" constraint=true]
+	4 -- 14 [label="D : 1
+P_min : 5103" constraint=true]
+	4 -- 20 [label="D : 1
+P_min : 6368" constraint=true]
+	4 -- 20 [label="D : 1
+P_min : 749" constraint=true]
+	4 -- 9 [label="D : 1
+P_min : 5886" constraint=true]
+	4 -- 19 [label="D : 1
+P_min : 9672" constraint=true]
+	4 -- 5 [label="D : 1
+P_min : 517" constraint=true]
+	4 -- 11 [label="D : 1
+P_min : 4248" constraint=true]
+	5 [color=lightblue style=filled]
+	5 -- 15 [label="D : 1
+P_min : 1350" constraint=true]
+	5 -- 19 [label="D : 1
+P_min : 438" constraint=true]
+	5 -- 7 [label="D : 1
+P_min : 7852" constraint=true]
+	5 -- 4 [label="D : 1
+P_min : 5875" constraint=true]
+	5 -- 4 [label="D : 1
+P_min : 9778" constraint=true]
+	5 -- 7 [label="D : 1
+P_min : 7728" constraint=true]
+	5 -- 18 [label="D : 1
+P_min : 6716" constraint=true]
+	5 -- 2 [label="D : 1
+P_min : 3935" constraint=true]
+	5 -- 4 [label="D : 1
+P_min : 517" constraint=true]
+	5 -- 18 [label="D : 1
+P_min : 2584" constraint=true]
+	6 [color=lightblue style=filled]
+	6 -- 11 [label="D : 1
+P_min : 9664" constraint=true]
+	6 -- 20 [label="D : 1
+P_min : 2794" constraint=true]
+	6 -- 12 [label="D : 1
+P_min : 1019" constraint=true]
+	6 -- 7 [label="D : 1
+P_min : 3089" constraint=true]
+	6 -- 19 [label="D : 1
+P_min : 8917" constraint=true]
+	6 -- 20 [label="D : 1
+P_min : 7654" constraint=true]
+	6 -- 9 [label="D : 1
+P_min : 9773" constraint=true]
+	6 -- 16 [label="D : 1
+P_min : 952" constraint=true]
+	6 -- 3 [label="D : 1
+P_min : 4602" constraint=true]
+	6 -- 11 [label="D : 1
+P_min : 9997" constraint=true]
+	6 -- 6 [label="D : 1
+P_min : 6790" constraint=true]
+	6 -- 6 [label="D : 1
+P_min : 6790" constraint=true]
+	6 -- 9 [label="D : 1
+P_min : 3151" constraint=true]
+	6 -- 20 [label="D : 1
+P_min : 3923" constraint=true]
+	6 -- 12 [label="D : 1
+P_min : 6853" constraint=true]
+	7 [color=lightblue style=filled]
+	7 -- 15 [label="D : 1
+P_min : 5494" constraint=true]
+	7 -- 19 [label="D : 1
+P_min : 6096" constraint=true]
+	7 -- 18 [label="D : 1
+P_min : 3585" constraint=true]
+	7 -- 6 [label="D : 1
+P_min : 3089" constraint=true]
+	7 -- 3 [label="D : 1
+P_min : 9437" constraint=true]
+	7 -- 8 [label="D : 1
+P_min : 1500" constraint=true]
+	7 -- 5 [label="D : 1
+P_min : 7852" constraint=true]
+	7 -- 4 [label="D : 1
+P_min : 1654" constraint=true]
+	7 -- 15 [label="D : 1
+P_min : 8675" constraint=true]
+	7 -- 15 [label="D : 1
+P_min : 2865" constraint=true]
+	7 -- 5 [label="D : 1
+P_min : 7728" constraint=true]
+	7 -- 14 [label="D : 1
+P_min : 9325" constraint=true]
+	7 -- 15 [label="D : 1
+P_min : 9185" constraint=true]
+	7 -- 2 [label="D : 1
+P_min : 9742" constraint=true]
+	7 -- 9 [label="D : 1
+P_min : 6204" constraint=true]
+	8 [color=lightblue style=filled]
+	8 -- 14 [label="D : 1
+P_min : 4441" constraint=true]
+	8 -- 15 [label="D : 1
+P_min : 5449" constraint=true]
+	8 -- 7 [label="D : 1
+P_min : 1500" constraint=true]
+	8 -- 16 [label="D : 1
+P_min : 1902" constraint=true]
+	8 -- 13 [label="D : 1
+P_min : 9921" constraint=true]
+	8 -- 2 [label="D : 1
+P_min : 1180" constraint=true]
+	8 -- 10 [label="D : 1
+P_min : 4263" constraint=true]
+	8 -- 15 [label="D : 1
+P_min : 3333" constraint=true]
+	8 -- 17 [label="D : 1
+P_min : 2593" constraint=true]
+	8 -- 15 [label="D : 1
+P_min : 1921" constraint=true]
+	8 -- 13 [label="D : 1
+P_min : 5504" constraint=true]
+	8 -- 15 [label="D : 1
+P_min : 2210" constraint=true]
+	8 -- 2 [label="D : 1
+P_min : 9309" constraint=true]
+	8 -- 17 [label="D : 1
+P_min : 9298" constraint=true]
+	9 [color=lightblue style=filled]
+	9 -- 15 [label="D : 1
+P_min : 1920" constraint=true]
+	9 -- 3 [label="D : 1
+P_min : 742" constraint=true]
+	9 -- 17 [label="D : 1
+P_min : 6410" constraint=true]
+	9 -- 13 [label="D : 1
+P_min : 597" constraint=true]
+	9 -- 1 [label="D : 1
+P_min : 355" constraint=true]
+	9 -- 14 [label="D : 1
+P_min : 2955" constraint=true]
+	9 -- 12 [label="D : 1
+P_min : 646" constraint=true]
+	9 -- 6 [label="D : 1
+P_min : 9773" constraint=true]
+	9 -- 19 [label="D : 1
+P_min : 7247" constraint=true]
+	9 -- 1 [label="D : 1
+P_min : 5771" constraint=true]
+	9 -- 4 [label="D : 1
+P_min : 5886" constraint=true]
+	9 -- 2 [label="D : 1
+P_min : 1323" constraint=true]
+	9 -- 6 [label="D : 1
+P_min : 3151" constraint=true]
+	9 -- 7 [label="D : 1
+P_min : 6204" constraint=true]
+	9 -- 11 [label="D : 1
+P_min : 6591" constraint=true]
+	10 [color=lightblue style=filled]
+	10 -- 3 [label="D : 1
+P_min : 9498" constraint=true]
+	10 -- 1 [label="D : 1
+P_min : 5856" constraint=true]
+	10 -- 12 [label="D : 1
+P_min : 6982" constraint=true]
+	10 -- 10 [label="D : 1
+P_min : 1649" constraint=true]
+	10 -- 10 [label="D : 1
+P_min : 1649" constraint=true]
+	10 -- 3 [label="D : 1
+P_min : 6065" constraint=true]
+	10 -- 15 [label="D : 1
+P_min : 5740" constraint=true]
+	10 -- 20 [label="D : 1
+P_min : 8252" constraint=true]
+	10 -- 8 [label="D : 1
+P_min : 4263" constraint=true]
+	10 -- 18 [label="D : 1
+P_min : 2623" constraint=true]
+	11 [color=lightblue style=filled]
+	11 -- 6 [label="D : 1
+P_min : 9664" constraint=true]
+	11 -- 3 [label="D : 1
+P_min : 266" constraint=true]
+	11 -- 3 [label="D : 1
+P_min : 1962" constraint=true]
+	11 -- 15 [label="D : 1
+P_min : 1001" constraint=true]
+	11 -- 12 [label="D : 1
+P_min : 1147" constraint=true]
+	11 -- 11 [label="D : 1
+P_min : 2776" constraint=true]
+	11 -- 11 [label="D : 1
+P_min : 2776" constraint=true]
+	11 -- 1 [label="D : 1
+P_min : 1296" constraint=true]
+	11 -- 18 [label="D : 1
+P_min : 7895" constraint=true]
+	11 -- 6 [label="D : 1
+P_min : 9997" constraint=true]
+	11 -- 1 [label="D : 1
+P_min : 5084" constraint=true]
+	11 -- 9 [label="D : 1
+P_min : 6591" constraint=true]
+	11 -- 16 [label="D : 1
+P_min : 2715" constraint=true]
+	11 -- 4 [label="D : 1
+P_min : 4248" constraint=true]
+	12 [color=lightblue style=filled]
+	12 -- 3 [label="D : 1
+P_min : 7970" constraint=true]
+	12 -- 15 [label="D : 1
+P_min : 9619" constraint=true]
+	12 -- 10 [label="D : 1
+P_min : 6982" constraint=true]
+	12 -- 6 [label="D : 1
+P_min : 1019" constraint=true]
+	12 -- 13 [label="D : 1
+P_min : 9935" constraint=true]
+	12 -- 12 [label="D : 1
+P_min : 6974" constraint=true]
+	12 -- 12 [label="D : 1
+P_min : 6974" constraint=true]
+	12 -- 11 [label="D : 1
+P_min : 1147" constraint=true]
+	12 -- 9 [label="D : 1
+P_min : 646" constraint=true]
+	12 -- 15 [label="D : 1
+P_min : 9336" constraint=true]
+	12 -- 13 [label="D : 1
+P_min : 2654" constraint=true]
+	12 -- 17 [label="D : 1
+P_min : 5609" constraint=true]
+	12 -- 12 [label="D : 1
+P_min : 204" constraint=true]
+	12 -- 12 [label="D : 1
+P_min : 204" constraint=true]
+	12 -- 3 [label="D : 1
+P_min : 4717" constraint=true]
+	12 -- 17 [label="D : 1
+P_min : 25" constraint=true]
+	12 -- 6 [label="D : 1
+P_min : 6853" constraint=true]
+	12 -- 20 [label="D : 1
+P_min : 7297" constraint=true]
+	12 -- 20 [label="D : 1
+P_min : 7314" constraint=true]
+	13 [color=lightblue style=filled]
+	13 -- 16 [label="D : 1
+P_min : 6872" constraint=true]
+	13 -- 12 [label="D : 1
+P_min : 9935" constraint=true]
+	13 -- 9 [label="D : 1
+P_min : 597" constraint=true]
+	13 -- 8 [label="D : 1
+P_min : 9921" constraint=true]
+	13 -- 18 [label="D : 1
+P_min : 6411" constraint=true]
+	13 -- 14 [label="D : 1
+P_min : 3267" constraint=true]
+	13 -- 14 [label="D : 1
+P_min : 7705" constraint=true]
+	13 -- 12 [label="D : 1
+P_min : 2654" constraint=true]
+	13 -- 18 [label="D : 1
+P_min : 4112" constraint=true]
+	13 -- 8 [label="D : 1
+P_min : 5504" constraint=true]
+	13 -- 16 [label="D : 1
+P_min : 6790" constraint=true]
+	14 [color=lightblue style=filled]
+	14 -- 1 [label="D : 1
+P_min : 7383" constraint=true]
+	14 -- 8 [label="D : 1
+P_min : 4441" constraint=true]
+	14 -- 17 [label="D : 1
+P_min : 2398" constraint=true]
+	14 -- 2 [label="D : 1
+P_min : 9866" constraint=true]
+	14 -- 17 [label="D : 1
+P_min : 3031" constraint=true]
+	14 -- 1 [label="D : 1
+P_min : 3619" constraint=true]
+	14 -- 9 [label="D : 1
+P_min : 2955" constraint=true]
+	14 -- 13 [label="D : 1
+P_min : 3267" constraint=true]
+	14 -- 13 [label="D : 1
+P_min : 7705" constraint=true]
+	14 -- 16 [label="D : 1
+P_min : 4108" constraint=true]
+	14 -- 7 [label="D : 1
+P_min : 9325" constraint=true]
+	14 -- 15 [label="D : 1
+P_min : 8333" constraint=true]
+	14 -- 4 [label="D : 1
+P_min : 5103" constraint=true]
+	14 -- 19 [label="D : 1
+P_min : 2169" constraint=true]
+	14 -- 3 [label="D : 1
+P_min : 6358" constraint=true]
+	14 -- 20 [label="D : 1
+P_min : 5479" constraint=true]
+	15 [color=lightblue style=filled]
+	15 -- 20 [label="D : 1
+P_min : 8072" constraint=true]
+	15 -- 5 [label="D : 1
+P_min : 1350" constraint=true]
+	15 -- 4 [label="D : 1
+P_min : 5314" constraint=true]
+	15 -- 12 [label="D : 1
+P_min : 9619" constraint=true]
+	15 -- 7 [label="D : 1
+P_min : 5494" constraint=true]
+	15 -- 9 [label="D : 1
+P_min : 1920" constraint=true]
+	15 -- 8 [label="D : 1
+P_min : 5449" constraint=true]
+	15 -- 16 [label="D : 1
+P_min : 8753" constraint=true]
+	15 -- 18 [label="D : 1
+P_min : 3189" constraint=true]
+	15 -- 17 [label="D : 1
+P_min : 3451" constraint=true]
+	15 -- 11 [label="D : 1
+P_min : 1001" constraint=true]
+	15 -- 10 [label="D : 1
+P_min : 5740" constraint=true]
+	15 -- 12 [label="D : 1
+P_min : 9336" constraint=true]
+	15 -- 8 [label="D : 1
+P_min : 3333" constraint=true]
+	15 -- 7 [label="D : 1
+P_min : 8675" constraint=true]
+	15 -- 8 [label="D : 1
+P_min : 1921" constraint=true]
+	15 -- 7 [label="D : 1
+P_min : 2865" constraint=true]
+	15 -- 17 [label="D : 1
+P_min : 217" constraint=true]
+	15 -- 14 [label="D : 1
+P_min : 8333" constraint=true]
+	15 -- 7 [label="D : 1
+P_min : 9185" constraint=true]
+	15 -- 17 [label="D : 1
+P_min : 8919" constraint=true]
+	15 -- 8 [label="D : 1
+P_min : 2210" constraint=true]
+	15 -- 18 [label="D : 1
+P_min : 1047" constraint=true]
+	16 [color=lightblue style=filled]
+	16 -- 13 [label="D : 1
+P_min : 6872" constraint=true]
+	16 -- 17 [label="D : 1
+P_min : 3613" constraint=true]
+	16 -- 15 [label="D : 1
+P_min : 8753" constraint=true]
+	16 -- 1 [label="D : 1
+P_min : 1213" constraint=true]
+	16 -- 20 [label="D : 1
+P_min : 2039" constraint=true]
+	16 -- 8 [label="D : 1
+P_min : 1902" constraint=true]
+	16 -- 2 [label="D : 1
+P_min : 7145" constraint=true]
+	16 -- 6 [label="D : 1
+P_min : 952" constraint=true]
+	16 -- 14 [label="D : 1
+P_min : 4108" constraint=true]
+	16 -- 13 [label="D : 1
+P_min : 6790" constraint=true]
+	16 -- 11 [label="D : 1
+P_min : 2715" constraint=true]
+	17 [color=lightblue style=filled]
+	17 -- 2 [label="D : 1
+P_min : 4510" constraint=true]
+	17 -- 16 [label="D : 1
+P_min : 3613" constraint=true]
+	17 -- 14 [label="D : 1
+P_min : 2398" constraint=true]
+	17 -- 9 [label="D : 1
+P_min : 6410" constraint=true]
+	17 -- 14 [label="D : 1
+P_min : 3031" constraint=true]
+	17 -- 15 [label="D : 1
+P_min : 3451" constraint=true]
+	17 -- 1 [label="D : 1
+P_min : 1663" constraint=true]
+	17 -- 2 [label="D : 1
+P_min : 1001" constraint=true]
+	17 -- 8 [label="D : 1
+P_min : 2593" constraint=true]
+	17 -- 12 [label="D : 1
+P_min : 5609" constraint=true]
+	17 -- 15 [label="D : 1
+P_min : 217" constraint=true]
+	17 -- 20 [label="D : 1
+P_min : 2514" constraint=true]
+	17 -- 15 [label="D : 1
+P_min : 8919" constraint=true]
+	17 -- 12 [label="D : 1
+P_min : 25" constraint=true]
+	17 -- 8 [label="D : 1
+P_min : 9298" constraint=true]
+	18 [color=lightblue style=filled]
+	18 -- 2 [label="D : 1
+P_min : 3982" constraint=true]
+	18 -- 7 [label="D : 1
+P_min : 3585" constraint=true]
+	18 -- 15 [label="D : 1
+P_min : 3189" constraint=true]
+	18 -- 19 [label="D : 1
+P_min : 4933" constraint=true]
+	18 -- 13 [label="D : 1
+P_min : 6411" constraint=true]
+	18 -- 5 [label="D : 1
+P_min : 6716" constraint=true]
+	18 -- 19 [label="D : 1
+P_min : 5852" constraint=true]
+	18 -- 13 [label="D : 1
+P_min : 4112" constraint=true]
+	18 -- 11 [label="D : 1
+P_min : 7895" constraint=true]
+	18 -- 10 [label="D : 1
+P_min : 2623" constraint=true]
+	18 -- 20 [label="D : 1
+P_min : 7343" constraint=true]
+	18 -- 1 [label="D : 1
+P_min : 767" constraint=true]
+	18 -- 15 [label="D : 1
+P_min : 1047" constraint=true]
+	18 -- 5 [label="D : 1
+P_min : 2584" constraint=true]
+	19 [color=lightblue style=filled]
+	19 -- 3 [label="D : 1
+P_min : 1890" constraint=true]
+	19 -- 4 [label="D : 1
+P_min : 3120" constraint=true]
+	19 -- 7 [label="D : 1
+P_min : 6096" constraint=true]
+	19 -- 4 [label="D : 1
+P_min : 9403" constraint=true]
+	19 -- 5 [label="D : 1
+P_min : 438" constraint=true]
+	19 -- 6 [label="D : 1
+P_min : 8917" constraint=true]
+	19 -- 18 [label="D : 1
+P_min : 4933" constraint=true]
+	19 -- 9 [label="D : 1
+P_min : 7247" constraint=true]
+	19 -- 18 [label="D : 1
+P_min : 5852" constraint=true]
+	19 -- 4 [label="D : 1
+P_min : 9672" constraint=true]
+	19 -- 14 [label="D : 1
+P_min : 2169" constraint=true]
+	20 [color=lightblue style=filled]
+	20 -- 15 [label="D : 1
+P_min : 8072" constraint=true]
+	20 -- 6 [label="D : 1
+P_min : 2794" constraint=true]
+	20 -- 16 [label="D : 1
+P_min : 2039" constraint=true]
+	20 -- 1 [label="D : 1
+P_min : 374" constraint=true]
+	20 -- 10 [label="D : 1
+P_min : 8252" constraint=true]
+	20 -- 6 [label="D : 1
+P_min : 7654" constraint=true]
+	20 -- 4 [label="D : 1
+P_min : 6368" constraint=true]
+	20 -- 17 [label="D : 1
+P_min : 2514" constraint=true]
+	20 -- 3 [label="D : 1
+P_min : 7504" constraint=true]
+	20 -- 4 [label="D : 1
+P_min : 749" constraint=true]
+	20 -- 14 [label="D : 1
+P_min : 5479" constraint=true]
+	20 -- 6 [label="D : 1
+P_min : 3923" constraint=true]
+	20 -- 1 [label="D : 1
+P_min : 3656" constraint=true]
+	20 -- 18 [label="D : 1
+P_min : 7343" constraint=true]
+	20 -- 12 [label="D : 1
+P_min : 7297" constraint=true]
+	20 -- 12 [label="D : 1
+P_min : 7314" constraint=true]
+	21 [color=lightblue style=filled]
+	22 [color=lightblue style=filled]
+	23 [color=lightblue style=filled]
+	24 [color=lightblue style=filled]
+	25 [color=lightblue style=filled]
+	26 [color=lightblue style=filled]
+	27 [color=lightblue style=filled]
+	28 [color=lightblue style=filled]
+	29 [color=lightblue style=filled]
+	30 [color=lightblue style=filled]
+	31 [color=lightblue style=filled]
+	32 [color=lightblue style=filled]
+	33 [color=lightblue style=filled]
+	34 [color=lightblue style=filled]
+	35 [color=lightblue style=filled]
+	36 [color=lightblue style=filled]
+	37 [color=lightblue style=filled]
+	38 [color=lightblue style=filled]
+	39 [color=lightblue style=filled]
+	40 [color=lightblue style=filled]
+	41 [color=lightblue style=filled]
+	42 [color=lightblue style=filled]
+	43 [color=lightblue style=filled]
+	44 [color=lightblue style=filled]
+	45 [color=lightblue style=filled]
+	46 [color=lightblue style=filled]
+	47 [color=lightblue style=filled]
+	48 [color=lightblue style=filled]
+	49 [color=lightblue style=filled]
+	50 [color=lightblue style=filled]
+	51 [color=lightblue style=filled]
+	52 [color=lightblue style=filled]
+	53 [color=lightblue style=filled]
+	54 [color=lightblue style=filled]
+	55 [color=lightblue style=filled]
+	56 [color=lightblue style=filled]
+	57 [color=lightblue style=filled]
+	58 [color=lightblue style=filled]
+	59 [color=lightblue style=filled]
+	60 [color=lightblue style=filled]
+	61 [color=lightblue style=filled]
+	62 [color=lightblue style=filled]
+	63 [color=lightblue style=filled]
+	64 [color=lightblue style=filled]
+	65 [color=lightblue style=filled]
+	66 [color=lightblue style=filled]
+	67 [color=lightblue style=filled]
+	68 [color=lightblue style=filled]
+	69 [color=lightblue style=filled]
+	70 [color=lightblue style=filled]
+	71 [color=lightblue style=filled]
+	72 [color=lightblue style=filled]
+	73 [color=lightblue style=filled]
+	74 [color=lightblue style=filled]
+	75 [color=lightblue style=filled]
+	76 [color=lightblue style=filled]
+	77 [color=lightblue style=filled]
+	78 [color=lightblue style=filled]
+	79 [color=lightblue style=filled]
+	80 [color=lightblue style=filled]
+	81 [color=lightblue style=filled]
+	82 [color=lightblue style=filled]
+	83 [color=lightblue style=filled]
+	84 [color=lightblue style=filled]
+	85 [color=lightblue style=filled]
+	86 [color=lightblue style=filled]
+	87 [color=lightblue style=filled]
+	88 [color=lightblue style=filled]
+	89 [color=lightblue style=filled]
+	90 [color=lightblue style=filled]
+	91 [color=lightblue style=filled]
+	92 [color=lightblue style=filled]
+	93 [color=lightblue style=filled]
+	94 [color=lightblue style=filled]
+	95 [color=lightblue style=filled]
+	96 [color=lightblue style=filled]
+	97 [color=lightblue style=filled]
+	98 [color=lightblue style=filled]
+	99 [color=lightblue style=filled]
+	100 [color=lightblue style=filled]
+	101 [color=lightblue style=filled]
+	102 [color=lightblue style=filled]
+	103 [color=lightblue style=filled]
+	104 [color=lightblue style=filled]
+	105 [color=lightblue style=filled]
+	106 [color=lightblue style=filled]
+	107 [color=lightblue style=filled]
+	108 [color=lightblue style=filled]
+	109 [color=lightblue style=filled]
+	110 [color=lightblue style=filled]
+	111 [color=lightblue style=filled]
+	112 [color=lightblue style=filled]
+	113 [color=lightblue style=filled]
+	114 [color=lightblue style=filled]
+	115 [color=lightblue style=filled]
+	116 [color=lightblue style=filled]
+	117 [color=lightblue style=filled]
+	118 [color=lightblue style=filled]
+	119 [color=lightblue style=filled]
+	120 [color=lightblue style=filled]
+	121 [color=lightblue style=filled]
+	122 [color=lightblue style=filled]
+	123 [color=lightblue style=filled]
+	124 [color=lightblue style=filled]
+	125 [color=lightblue style=filled]
+	126 [color=lightblue style=filled]
+	127 [color=lightblue style=filled]
+	128 [color=lightblue style=filled]
+	129 [color=lightblue style=filled]
+	130 [color=lightblue style=filled]
+	131 [color=lightblue style=filled]
+	132 [color=lightblue style=filled]
+	133 [color=lightblue style=filled]
+	134 [color=lightblue style=filled]
+	135 [color=lightblue style=filled]
+	136 [color=lightblue style=filled]
+	137 [color=lightblue style=filled]
+	138 [color=lightblue style=filled]
+	139 [color=lightblue style=filled]
+	140 [color=lightblue style=filled]
+	1 [color=red style=filled]
+	20 [color=red style=filled]
+	4 [color=red style=filled]
+	5 [color=red style=filled]
+	19 [color=red style=filled]
+	1 -- 20 [label="Shortest path" color=red constraint=true fontcolor=red]
+	20 -- 4 [label="Shortest path" color=red constraint=true fontcolor=red]
+	4 -- 5 [label="Shortest path" color=red constraint=true fontcolor=red]
+	5 -- 19 [label="Shortest path" color=red constraint=true fontcolor=red]
+}

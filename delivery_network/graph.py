@@ -247,8 +247,9 @@ def graph_from_file(filename):
     return g
 """
 def graph_from_file(filename):
-    with open(filename, "r") as file:
-        lines = open(filename, "r").readlines()
+    f = open(filename, "r")
+    with f as file:
+        lines = f.readlines()
         lines = [i for i in lines]
         line1 = lines.pop(0).split()
         g = Graph([i for i in range(1,int(line1[0])+1)])
@@ -264,6 +265,7 @@ def graph_from_file(filename):
                 g.get_edge(int(node1), int(node2), int(power_min))
             else:
                 raise Exception("Format incorrect")
+    f.close()    
     return g
 
 ## Algorithme de Kruskal et structure Union-Find ##
@@ -289,7 +291,7 @@ def kruskal(graph):
         if uf.find(node1) != uf.find(node2):
             g_mst.add_edge(node1, node2, weight)
             uf.union(node1, node2)
-
+    print(99775 in g_mst.graph)
     return g_mst
 
 class UnionFind:
