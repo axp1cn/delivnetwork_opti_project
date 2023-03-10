@@ -252,7 +252,7 @@ def graph_from_file(filename):
         lines = f.readlines()
         lines = [i for i in lines]
         line1 = lines.pop(0).split()
-        g = Graph([i for i in range(1,int(line1[0])+1)])
+        g = Graph()
         for i in range(len(lines)):
             lines[i] = lines[i].split()
             if len(lines[i]) == 3:

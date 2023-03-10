@@ -2,14 +2,16 @@ from graph import Graph, graph_from_file, kruskal
 import graphviz, time, random, statistics
 
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
-file_name = "routes.1.in"
+file_name = "routes.7.in"
 
 
 g = graph_from_file(data_path + file_name)
+print(17512 in g.graph)
 g_mst = kruskal(g)
-print(g)
-print(len(g.connected_components()))
-g.graphic_representation(1, 19, 1000)
+print(17512 in g_mst.graph)
+print(len(g_mst.connected_components()))
+#g.graphic_representation(1, 19, 1000)
+
 """print(g_mst)
 g_mst.graphic_representation(1, 19, 1000)
 print(g_mst.min_power1(random.randrange(1,g_mst.nb_nodes+1), random.randrange(1,g_mst.nb_nodes+1)))
@@ -69,7 +71,6 @@ est la puissance minimale pour couvrir le trajet t dans G. Ainsi, notre hypothè
 fausse et la puissance minimale pour couvrir un trajet t dans le graphe G est égale à la puissance 
 minimale pour couvrir ce trajet t dans le graphe A.
 """
-
 """
 # Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power1
 
@@ -84,7 +85,7 @@ for i in range (1,11):
         print(a)
         b = random.randint(1,graph.nb_nodes)
         print(b)
-        while a == b:
+        while a == b and a in graph.graph and b in graph.graph:
             a = random.randint(1,graph.nb_nodes)
             b = random.randint(1,graph.nb_nodes)  
         print(graph.min_power1(a, b))
