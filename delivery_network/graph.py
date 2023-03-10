@@ -253,7 +253,6 @@ def graph_from_file(filename):
     f = open(filename, "r")
     with f as file:
         lines = f.readlines()
-        lines = [i for i in lines]
         line1 = lines.pop(0).split()
         g = Graph([i for i in range(1,int(line1[0])+1)])
         for i in range(len(lines)):

@@ -5,10 +5,10 @@ data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/
 file_name = "network.1.in"
 
 
-g = graph_from_file(data_path + file_name)
+"""g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
 print(g_mst.min_power1(7,9))
-g_mst.graphic_representation(7, 9, 1000)
+g_mst.graphic_representation(7, 9, 1000)"""
 
 """print(g_mst)
 g_mst.graphic_representation(1, 19, 1000)
@@ -95,3 +95,18 @@ for i in range (1,11):
 
     print("La vitesse d'exécution moyenne de la méthode min_power1 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
 """
+
+# Question 15
+
+for i in range (1,11):
+    f = open(data_path + "routes."+str(i)+".in", "r")
+    g = graph_from_file(data_path + "routes."+str(i)+".in")
+    dest_path = "./input/routes."+str(i)+".out"
+    y = open(dest_path, "w")
+    lines = f.readlines()
+    for j in range(1,len(lines)):
+        lines[j] = lines[j].split()
+        min_power, path = g.min_power1(int(lines[j][0]), int(lines[j][1]))
+        y.write(str(min_power)+"\n")
+    f.close()
+    y.close()
