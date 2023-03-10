@@ -39,8 +39,9 @@ class Graph:
             output = "The graph is empty"            
         else:
             output = f"The graph has {self.nb_nodes} nodes and {self.nb_edges} edges.\n"
-            for source, destination in self.graph.items():
-                output += f"{source}-->{destination}\n"
+            sorted_keys = sorted(self.graph.keys())
+            for source in sorted_keys:
+                output += f"{source}-->{self.graph[source]}\n"
         return output
     
     def add_edge(self, node1, node2, power_min, dist=1):
@@ -112,10 +113,10 @@ class Graph:
                     visited[neighbor] = True
                     result= look_for_path(neighbor, path+[neighbor])
                     if result is not None:
-                        return(result)
+                        return result
             return None
         return look_for_path(src,[src])
-     #la complexité en temps est de l'ordre de O(n²) dans le pire des cas (graphe connecté) avec n le nombre de noeud
+    #la complexité en temps est de l'ordre de O(n²) dans le pire des cas (graphe connecté) avec n le nombre de noeud
 
     ## Algorithme de Djikstra ##
 
@@ -176,7 +177,7 @@ class Graph:
         for node, neighbors in graph.items():
             repr.node(str(node), style = "filled", color = "lightblue")
             for neighbor, power_min, dist in neighbors:
-                    repr.edge(str(node), str(neighbor), label="D : " + str(dist) + "\nP_min : " + str(power_min))
+                    repr.edge(str(node), str(neighbor), label="D : " + str(dist) + "\nP_min : " + str(power_min), constraint='true')
 
         if path_min_power != None:
             for node in path_min_power :
@@ -185,13 +186,45 @@ class Graph:
                 node1 = path_min_power[i]
                 node2 = path_min_power[i+1]
 
-                repr.edge(str(node1), str(node2), label="Shortest path", color ="red", fontcolor ="red")
+                repr.edge(str(node1), str(node2), label="Shortest path", color ="red", fontcolor ="red", constraint='true')
 
         repr.view()
         return None
     
     def get_edge(self, node1, node2, power_min):
         self.edges.append((node1, node2, power_min))
+
+    def min_power1(self, src, dest):
+        visited = {node : False for node in self.nodes}
+        power_min = {node : -1 for node in self.nodes}
+        power_min[src] = 0
+        path = []
+
+        def dfs(node, path):
+            if node == dest:
+                return power_min[dest], path
+            for neighbor in self.graph[node]:
+                neighbor, power, dist = neighbor
+                if not visited[neighbor]:
+                    visited[neighbor] = True
+                    if power_min[neighbor] < power:
+                        power_min[neighbor] = power
+                    result = dfs(neighbor, path + [neighbor])
+                    if result is not None:
+                        return result
+            return None
+        
+        result = dfs(src, [src])
+        if result is not None:
+            for current_node in reversed(result[1]):
+                path += [current_node]
+                if current_node == src:
+                    break
+            return result[0], list(reversed(path))
+        else:
+            return None, []
+
+
 
 
 """
