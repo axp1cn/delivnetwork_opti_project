@@ -2,15 +2,13 @@ from graph import Graph, graph_from_file, kruskal
 import graphviz, time, random, statistics
 
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
-file_name = "routes.7.in"
+file_name = "network.1.in"
 
 
 g = graph_from_file(data_path + file_name)
-print(17512 in g.graph)
 g_mst = kruskal(g)
-print(17512 in g_mst.graph)
-print(len(g_mst.connected_components()))
-#g.graphic_representation(1, 19, 1000)
+print(g_mst.min_power1(7,9))
+g_mst.graphic_representation(7, 9, 1000)
 
 """print(g_mst)
 g_mst.graphic_representation(1, 19, 1000)
@@ -38,6 +36,7 @@ for i in range (1,11):
     average_speed = statistics.mean(counter)
 
     print("La vitesse d'exécution moyenne de la méthode min_power pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
+
 """
 
 # Question 11 : 

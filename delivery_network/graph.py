@@ -171,7 +171,10 @@ class Graph:
     def graphic_representation(self, src, dest, power):
 
         repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
-        path_min_power = self.get_shortest_path_with_power(src, dest, power)
+        if self.nb_nodes == self.nb_edges +1:
+            path_min_power = self.min_power1(src,dest)[1]
+        else:
+            path_min_power = self.get_shortest_path_with_power(src, dest, power)
         graph = self.graph
 
         for node, neighbors in graph.items():
@@ -252,7 +255,7 @@ def graph_from_file(filename):
         lines = f.readlines()
         lines = [i for i in lines]
         line1 = lines.pop(0).split()
-        g = Graph()
+        g = Graph([i for i in range(1,int(line1[0])+1)])
         for i in range(len(lines)):
             lines[i] = lines[i].split()
             if len(lines[i]) == 3:
@@ -265,7 +268,7 @@ def graph_from_file(filename):
                 g.get_edge(int(node1), int(node2), int(power_min))
             else:
                 raise Exception("Format incorrect")
-    f.close()    
+    f.close    
     return g
 
 ## Algorithme de Kruskal et structure Union-Find ##
@@ -291,7 +294,6 @@ def kruskal(graph):
         if uf.find(node1) != uf.find(node2):
             g_mst.add_edge(node1, node2, weight)
             uf.union(node1, node2)
-    print(99775 in g_mst.graph)
     return g_mst
 
 class UnionFind:
