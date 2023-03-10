@@ -30,6 +30,7 @@ class Graph:
         self.graph = dict([(n, []) for n in nodes])
         self.nb_nodes = len(nodes)
         self.nb_edges = 0
+        self.edges = []
     
 
     def __str__(self):
@@ -70,6 +71,7 @@ class Graph:
         self.graph[node2].append((node1, power_min, dist))
         self.nb_edges += 1
 
+        return None
 
 
     def connected_components(self):
@@ -91,8 +93,6 @@ class Graph:
                 con_comps.append(dfs(node))
         
         return con_comps
-
-
 
     def connected_components_set(self):
         """
@@ -116,6 +116,8 @@ class Graph:
             return None
         return look_for_path(src,[src])
      #la complexité en temps est de l'ordre de O(n²) dans le pire des cas (graphe connecté) avec n le nombre de noeud
+
+    ## Algorithme de Djikstra ##
 
     def get_shortest_path_with_power(self, src, dest, power):
         visited = []
@@ -187,6 +189,11 @@ class Graph:
 
         repr.view()
         return None
+    
+    def get_edge(self, node1, node2, power_min):
+        self.edges.append((node1, node2, power_min))
+
+
 """
 def graph_from_file(filename):
     with open(filename, "r") as file:
@@ -197,9 +204,11 @@ def graph_from_file(filename):
             if len(edge) == 3:
                 node1, node2, power_min = edge
                 g.add_edge(node1, node2, power_min) # will add dist=1 by default
+                g.get_edge(node1, node2, power_min)
             elif len(edge) == 4:
                 node1, node2, power_min, dist = edge
                 g.add_edge(node1, node2, power_min, dist)
+                g.get_edge(node1, node2, power_min)
             else:
                 raise Exception("Format incorrect")
     return g
@@ -209,16 +218,67 @@ def graph_from_file(filename):
         lines = open(filename, "r").readlines()
         lines = [i for i in lines]
         line1 = lines.pop(0).split()
-        g = Graph([range(1,int(line1[0])+1)])
+        g = Graph([i for i in range(1,int(line1[0])+1)])
         for i in range(len(lines)):
             lines[i] = lines[i].split()
             if len(lines[i]) == 3:
                 node1, node2, power_min = lines[i]
                 g.add_edge(int(node1), int(node2), int(power_min)) # will add dist=1 by default
+                g.get_edge(int(node1), int(node2), int(power_min))
             elif len(lines[i]) == 4:
                 node1, node2, power_min, dist = lines[i]
                 g.add_edge(int(node1), int(node2), int(power_min), int(dist))
+                g.get_edge(int(node1), int(node2), int(power_min))
             else:
                 raise Exception("Format incorrect")
     return g
+
+## Algorithme de Kruskal et structure Union-Find ##
+
+#La complexité de l'algorithme de Kruskal est dominée par le tri des arêtes, qui prend O(E log E) temps, où E 
+# est l'ensemble des arêtes de l'arbre couvrant de poids minimal créé (graphe connexe sans cycle).
+# Ensuite, nous parcourons toutes les arêtes triées et effectuons une opération Union-Find sur chaque arête, 
+# ce qui prend O(E alpha(V)) temps, où alpha(V) est la fonction inverse d'Ackermann et est essentiellement 
+# constante pour des tailles de graphe pratiques. 
+# En conséquence, la complexité totale de l'algorithme de Kruskal est de O(E log E) + O(E alpha(V)) = O(E log E).
+
+def kruskal(graph):
+    g_mst = Graph()
+    g_mst.nodes = graph.nodes
+
+    uf = UnionFind(graph.nodes)
+
+    edges = sorted(graph.edges, key=lambda x: x[2])
+
+    for edge in edges:
+        node1, node2, weight = edge
+
+        if uf.find(node1) != uf.find(node2):
+            g_mst.add_edge(node1, node2, weight)
+            uf.union(node1, node2)
+
+    return g_mst
+
+class UnionFind:
+    def __init__(self, nodes):
+        self.parent = {node: node for node in nodes}
+        self.rank = {node: 0 for node in nodes}
+    
+    def find(self, u):
+        if self.parent[u] != u:
+            self.parent[u] = self.find(self.parent[u])
+        return self.parent[u]
+    
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+        if root_u == root_v:
+            return
+        if self.rank[root_u] < self.rank[root_v]:
+            self.parent[root_u] = root_v
+        elif self.rank[root_u] > self.rank[root_v]:
+            self.parent[root_v] = root_u
+        else:
+            self.parent[root_v] = root_u
+            self.rank[root_u] += 1
 
