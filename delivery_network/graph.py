@@ -2,29 +2,26 @@ import graphviz
 
 class Graph:
     """
-    A class representing graphs as adjacency lists and implementing various algorithms on the graphs. Graphs in the class are not oriented. 
-    Attributes: 
+    On crée la classe Graph qui va définir un nouvel objet: les graphes, et contenir des méthodes qui nous seront utiles pour travailler sur
+    ces graphes.
+    Nous utiliserons ce cette classes les différentes variables ci dessous: 
     -----------
     nodes: NodeType
-        A list of nodes. Nodes can be of any immutable type, e.g., integer, float, or string.
-        We will usually use a list of integers 1, ..., n.
+        Une liste de noeuds qui peuvent être de n'importe quels types.
+        Nos fichiers network ont leurs noeuds comme entiers.
     graph: dict
-        A dictionnary that contains the adjacency list of each node in the form
-        graph[node] = [(neighbor1, p1, d1), (neighbor1, p1, d1), ...]
-        where p1 is the minimal power on the edge (node, neighbor1) and d1 is the distance on the edge
+        Un dictionnaire qui contient la liste d'adjacence de chaque noeud sous la forme
+        graph[node] = [(neighbor1, p1, d1), (neighbor2, p2, d2), ...]
+        avec p1, d1 la puissance minimale et la distance de l'arête (node, neighbor1) 
     nb_nodes: int
-        The number of nodes.
+        Le nombre de noeud.
     nb_edges: int
-        The number of edges. 
+        Le nombre d'arête. 
     """
 
     def __init__(self, nodes=[]):
         """
-        Initializes the graph with a set of nodes, and no edges. 
-        Parameters: 
-        -----------
-        nodes: list, optional
-            A list of nodes. Default is empty.
+        Initialise le graphe avec une liste de noeud en paramètre (vide par défaut). 
         """
         self.nodes = nodes
         self.graph = dict([(n, []) for n in nodes])
@@ -34,7 +31,8 @@ class Graph:
     
 
     def __str__(self):
-        """Prints the graph as a list of neighbors for each node (one per line)"""
+        """Affiche le nombre de noeud et d'arêtes ainsi que le graphe: chaque ligne on a un noeud (classé par ordre croissant) 
+        et sa liste d'adjacence"""
         if not self.graph:
             output = "The graph is empty"            
         else:
@@ -43,22 +41,12 @@ class Graph:
             for source in sorted_keys:
                 output += f"{source}-->{self.graph[source]}\n"
         return output
-    
+    #QUESTION 1 (graph_from_file est sous la classe graph):
     def add_edge(self, node1, node2, power_min, dist=1):
-        """
-        Adds an edge to the graph. Graphs are not oriented, hence an edge is added to the adjacency list of both end nodes. 
-
-        Parameters: 
-        -----------
-        node1: NodeType
-            First end (node) of the edge
-        node2: NodeType
-            Second end (node) of the edge
-        power_min: numeric (int or float)
-            Minimum power on this edge
-        dist: numeric (int or float), optional
-            Distance between node1 and node2 on the edge. Default is 1.
-        """
+        """ Le but de cette fonction est d'ajouter une arête au graphe, on s'en servira dans notre fonction graph_from_file qui créé un graphe
+        à partir d'un fichier network. 
+        On fait attention a bien mettre à jour nb_nodes et nb_edges, et on rajoute les noeuds à la liste nodes si ils n'y sont pas, ainsi que
+        le voisin dans la liste d'adjacence """
         if node1 not in self.graph:
             self.graph[node1] = []
             self.nb_nodes += 1
@@ -73,12 +61,18 @@ class Graph:
         self.nb_edges += 1
 
         return None
-
-
+    
+    #QUESTION 2:
+    """  Etant donné un graphe, on va créer dans cette méthode la liste des composantes connexes"""
     def connected_components(self):
+        """ on crée une liste vide qu'on remplira avec nos composantes(qui sont aussi des listes), et un dictionnaire visited 
+        avec pour clef un noeud et pour valeur un booléen désignant si le noeud a été visité ou non"""
         con_comps =[]
         visited = {node:False for node in self.nodes}
-
+        """ on créer une fonction récursive recherche en profondeur qui quand on lui donne un noeud va retourner la composante connexe 
+        de ce noeud. Pour cela, on ajoute le noeud dans la composante parcourt tous les voisins du noeud, si il n'est pas 
+        déjà visité on marque comme visité et réitère la fonction sur le noeud voisin
+        La complexité de DFS est O(V+E) soit O(V²) dans le pire des cas (graphe connecté: E=V²)"""
         def dfs(node):
             component = [node]
             for neighbor in self.graph[node]:
@@ -87,7 +81,8 @@ class Graph:
                     visited[neighbor] = True
                     component += dfs(neighbor)
             return component
-
+        """ On utilise notre fonction récursive DFS sur l'ensemble des noeuds non visités, chaque composante connexe est ajouté dans 
+        la liste des comosantes connexes"""
         for node in self.nodes:
             if not visited[node]:
                 visited[node] = True
@@ -96,17 +91,23 @@ class Graph:
         return con_comps
 
     def connected_components_set(self):
-        """
-        The result should be a set of frozensets (one per component), 
-        For instance, for network01.in: {frozenset({1, 2, 3}), frozenset({4, 5, 6, 7})}
-        """
+        """ On renvoie notre liste de liste con_comps comme un ensemble de frozensets qui sont immuables, on peut les utiliser comme clef de
+        dictionnaire contrairement aux listes"""
         return set(map(frozenset, self.connected_components()))
     
+    #QUESTION 3:
+    """ On créer la méthode qui etant donné un noeud source et un noeud destination ainsi qu'une puissance p donnée va déterminer si 
+    un camion de puissance p donnée va pouvoir passer et renvoyer un chemin si possible """
     def get_path_with_power(self, src, dest, power):
         visited = {node:False for node in self.nodes} 
+        """on crée la fonction récursive look_for_path qui étant donné un noeud et une liste de noeuds renvoie la liste de neouds à laquelle 
+        on a ajouté le chemin entre le noeud et la destination finale"""
         def look_for_path(node, path):
             if node==dest:
                 return path
+            """après avoir vérifié si l'on n'était pas déjà arrivé à la destination finale on va parcourir les voisins du noeud non déjà visité
+            et si la condition de puissance est verifiée on ajoute le voisin au chemin et relance la fonction avec le voisin et le chemin
+            en paramètre """
             for neighbor in self.graph[node]:
                 neighbor, power_min, dist = neighbor
                 if not visited[neighbor] and power_min<=power:
@@ -115,47 +116,61 @@ class Graph:
                     if result is not None:
                         return result
             return None
+        """une fois look_for_path définie, get_ path_with_power sera juste la recherche d'un chemin en partant de src avec comme
+        chemin de noeud déjà parcouru [src], si jamais il n'y a pas de chemin possible, la fonction ne retourne rien"""
         return look_for_path(src,[src])
-    #la complexité en temps est de l'ordre de O(n²) dans le pire des cas (graphe connecté) avec n le nombre de noeud
+    """la complexité en temps est de l'ordre de O(E) soit  O(V²) dans le pire des cas (graphe connecté)"""
 
-    ## Algorithme de Djikstra ##
-
+    #QUESTION 5:
+    """On va utiliser l'algorithme de DJIKISTRA pour trouver le chemin le plus court sous contrainte de la puissance du camion
+    on a en paramètre un noeud source, un noeud destination et la puissance du camion"""
     def get_shortest_path_with_power(self, src, dest, power):
+        """on crée la liste des noeuds visités, un dictionnaire distances la distance du chemin le plus court entre le nœud source 
+        et chaque nœud du graphe, et un dictionnaire previous pour stocké noeud précédent de chaque noeud dans le chemin le plus court"""
         visited = []
         distances = {node: float('inf') for node in self.nodes}
         distances[src] = 0
         previous = {node: None for node in self.nodes}
         current_node = src
         while current_node != dest:
+            "on vérifie si il existe un chemin"
             if current_node is None:
                 return None
             visited.append(current_node)
+            "on va parcourir les voisins de noeud actuel non déjà visité, vérifier que la condition de puissance est vérifiée "
             for neighbor, power_min, edge_distance in self.graph[current_node]:
                 if power_min > power or neighbor in visited:
                     continue
+                """on ajoute la distance entre le noeud actuel et un voisin à la distance totale à la distance du chemin et on compare
+                à ce qu'on obtient avec les autres voisins, Si la distance totale est inférieure à la distance stockée dans le dictionnaire 
+                distances pour le voisin, le code met à jour la distance et le nœud précédent pour le voisin"""
                 new_distance = distances[current_node] + edge_distance
                 if new_distance < distances[neighbor]:
                     distances[neighbor] = new_distance
                     previous[neighbor] = current_node
+            "on crée un dictionnaire avec les noeuds non visité et leur distance la plus courte au noeud source"
             unvisited = {node: distances[node] for node in distances if node not in visited}
             if not unvisited:
                 return None
+            "On sélectionne le noeud non visité avec la distance la plus courte comme noeud courant"
             current_node = min(unvisited, key=unvisited.get)
+        "on crée la liste des noeuds composant le chemin le plus court entre le noeud actuel et le noeud source"
         path = []
         while current_node is not None:
             path.insert(0, current_node)
             current_node = previous[current_node]
         return path if path != [dest] else None
-    #complexité en temps de n²ln(n) avec n le nombre de noeud dans le pire des cas(graphe connecté)
+    "complexité en temps de O(Eln(V)) donc O(V²ln(V)) dans le pire des cas(graphe connecté)"
     
+    #QUESTION 6:
     def min_power(self, src, dest):
-        # Trouver la puissance maximale du graphe
+        "On cherche la puissance maximale sur le graphe"
         max_puissance = max([edge[1] for node in self.nodes for edge in self.graph[node]])
-        # Initialiser les bornes inférieure et supérieure de la recherche binaire
+        "On initialise les bornes de la recherche Binaire"
         lower_bound = 0
         upper_bound = max_puissance
         best_path = None
-        # Recherche binaire pour trouver la puissance minimale requise
+        "On effectue la recherche binaire (dichotomie)"
         while lower_bound <= upper_bound:
             mid = (lower_bound + upper_bound) // 2
             path = self.get_shortest_path_with_power(src, dest, mid)
@@ -164,24 +179,29 @@ class Graph:
                 upper_bound = mid - 1
             else:
                 lower_bound = mid + 1
-        # Retourner le chemin et la puissance minimale requise
+        "on retourne le chemin ainsi que la puissance minimale requise"
         return (best_path, lower_bound)
-    #complexité de n²ln²(n) dans le pire des cas (graphe connecté)
-   
-    def graphic_representation(self, src, dest, power):
+    "complexité de O(log(max_puissance)*Elog(V)) "
 
+    #QUESTION 7:
+    """On implémente une méthode de représentation graphique en utilisant graphviz, on affiche en rouge le chemin ayant 
+    la puissance minimale qu'on a trouvé à la question 6"""
+    def graphic_representation(self, src, dest, power):
         repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
+        """si le graphe n'a pas de boucle et est connexe (arbre) on utilise le min_power1 du TD 2, si le graphe n'est pas 
+        un arbre on utilise min_power de la question 6"""
         if self.nb_nodes == self.nb_edges +1:
             path_min_power = self.min_power1(src,dest)[1]
+        
         else:
-            path_min_power = self.get_shortest_path_with_power(src, dest, power)
+            path_min_power = self.min_power(src, dest)[1]
         graph = self.graph
-
+        "on affiche les noeuds et les arêtes"
         for node, neighbors in graph.items():
             repr.node(str(node), style = "filled", color = "lightblue")
             for neighbor, power_min, dist in neighbors:
                     repr.edge(str(node), str(neighbor), label="D : " + str(dist) + "\nP_min : " + str(power_min), constraint='true')
-
+        "on affiche en rouge le chemin solution de la question 6"
         if path_min_power != None:
             for node in path_min_power :
                 repr.node(str(node), style = "filled", color = "red")
@@ -249,6 +269,7 @@ def graph_from_file(filename):
                 raise Exception("Format incorrect")
     return g
 """
+#QUESTION 1 ET 4:
 def graph_from_file(filename):
     f = open(filename, "r")
     with f as file:
