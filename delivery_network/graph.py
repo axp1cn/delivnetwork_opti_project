@@ -246,7 +246,62 @@ class Graph:
             return result[0], list(reversed(path))
         else:
             return None, []
+        
+    #QUESTION 16:
+    
+    """il faudrait une fonction qui trouve les ancêtres et les stockent dans un dictionnaire ancestors"""
+    
+    def min_power_for_path(self, start, end):
+        # Trouver la liste des ancêtres communs entre start et end
+        common_ancestors = set(self.ancestors[start]).intersection(self.ancestors[end])
 
+        # Trier les ancêtres par ordre décroissant de puissance minimale
+        sorted_ancestors = sorted(common_ancestors, key=lambda x: self.ancestors[start][x][0], reverse=True)
+
+        # Parcourir la liste des ancêtres et trouver la puissance minimale pour chaque trajet
+        min_power = float('inf')
+        current_node = start
+        for ancestor in sorted_ancestors:
+            ancestor_power, ancestor_dist = self.ancestors[start][ancestor]
+            path_power = self.binary_search_power(current_node, ancestor, ancestor_power, ancestor_dist)
+            min_power = max(min_power, path_power)
+            current_node = ancestor
+
+        # Trouver la puissance minimale pour le dernier trajet
+        path_power = self.binary_search_power(current_node, end, 0, 1)
+        min_power = max(min_power, path_power)
+
+        return min_power
+    
+    def is_power_sufficient(self, start, end, power, max_dist):
+        # Vérifie si la puissance power est suffisante pour couvrir le trajet entre start et end
+        current_node = start
+        while current_node != end:
+            next_node, next_power, next_dist = None, None, None
+            for neighbor, neighbor_power, neighbor_dist in self.graph[current_node]:
+                if neighbor == self.ancestors[current_node][0]:
+                    next_node, next_power, next_dist = neighbor, neighbor_power, neighbor_dist
+                    break
+            if next_node is None or next_dist > max_dist or next_power < power:
+                return False
+            max_dist -= next_dist
+            power -= next_dist
+            current_node = next_node
+        return True
+    
+    def binary_search_power(self, start, end, min_power, max_dist):
+        # Recherche binaire pour trouver la puissance minimale pour couvrir le trajet entre start et end
+        low = min_power
+        high = max([edge[1] for node in self.nodes for edge in self.graph[node]])
+
+        while low < high:
+            mid = (low + high) // 2
+            if self.is_power_sufficient(start, end, mid, max_dist):
+                high = mid
+            else:
+                low = mid + 1
+
+        return high
 
 
 
