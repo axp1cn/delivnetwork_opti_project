@@ -77,6 +77,7 @@ for i in range (1,11):
     average_speed = statistics.mean(counter)
 
     print("La vitesse d'exécution moyenne de la méthode min_power1 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
+"""
 
 for i in range (1,11):
     f = open(data_path + "routes."+str(i)+".in", "r")
@@ -91,4 +92,3 @@ for i in range (1,11):
         y.write(str(min_power)+"\n")
     f.close()
     y.close()
-"""

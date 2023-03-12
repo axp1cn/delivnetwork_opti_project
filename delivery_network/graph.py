@@ -327,7 +327,7 @@ class Graph:
 def graph_from_file(filename):
     with open(filename, "r") as file:
         n, m = map(int, file.readline().split())
-        g = Graph(range(1, n+1))
+        g = Graph(list(range(1, n+1))) #il y avait une erreur dans le code initial (absence de la fonction list())
         for _ in range(m):
             edge = list(map(int, file.readline().split()))
             if len(edge) == 3:
