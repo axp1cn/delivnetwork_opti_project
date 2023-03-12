@@ -41,7 +41,8 @@ class Graph:
             for source in sorted_keys:
                 output += f"{source}-->{self.graph[source]}\n"
         return output
-    #QUESTION 1 (graph_from_file est sous la classe graph):
+    
+    #QUESTION 1 (la fonction graph_from_file est sous la classe Graph):
     def add_edge(self, node1, node2, power_min, dist=1):
         """ Le but de cette fonction est d'ajouter une arête au graphe, on s'en servira dans notre fonction graph_from_file qui créé un graphe
         à partir d'un fichier network. 
@@ -69,8 +70,8 @@ class Graph:
         avec pour clef un noeud et pour valeur un booléen désignant si le noeud a été visité ou non"""
         con_comps =[]
         visited = {node:False for node in self.nodes}
-        """ on créer une fonction récursive recherche en profondeur qui quand on lui donne un noeud va retourner la composante connexe 
-        de ce noeud. Pour cela, on ajoute le noeud dans la composante parcourt tous les voisins du noeud, si il n'est pas 
+        """on va créer une fonction récursive recherche en profondeur qui quand on lui donne un noeud va retourner la composante connexe 
+        de ce noeud. Pour cela, on ajoute le noeud dans la composante, on parcourt tous les voisins du noeud, si il n'est pas 
         déjà visité on marque comme visité et réitère la fonction sur le noeud voisin
         La complexité de DFS est O(V+E) soit O(V²) dans le pire des cas (graphe connecté: E=V²)"""
         def dfs(node):
@@ -81,8 +82,8 @@ class Graph:
                     visited[neighbor] = True
                     component += dfs(neighbor)
             return component
-        """ On utilise notre fonction récursive DFS sur l'ensemble des noeuds non visités, chaque composante connexe est ajouté dans 
-        la liste des comosantes connexes"""
+        """on utilise notre fonction récursive DFS sur l'ensemble des noeuds non visités, chaque composante connexe est ajoutés dans 
+        la liste des composantes connexes con_comps"""
         for node in self.nodes:
             if not visited[node]:
                 visited[node] = True
@@ -91,12 +92,12 @@ class Graph:
         return con_comps
 
     def connected_components_set(self):
-        """ On renvoie notre liste de liste con_comps comme un ensemble de frozensets qui sont immuables, on peut les utiliser comme clef de
+        """on renvoie notre liste de liste con_comps comme un ensemble de frozensets qui sont immuables, on peut les utiliser comme clef de
         dictionnaire contrairement aux listes"""
         return set(map(frozenset, self.connected_components()))
     
     #QUESTION 3:
-    """ On créer la méthode qui etant donné un noeud source et un noeud destination ainsi qu'une puissance p donnée va déterminer si 
+    """On va créer la méthode qui etant donnés un noeud source et un noeud destination ainsi qu'une puissance p donnée va déterminer si 
     un camion de puissance p donnée va pouvoir passer et renvoyer un chemin si possible """
     def get_path_with_power(self, src, dest, power):
         visited = {node:False for node in self.nodes} 
@@ -152,7 +153,7 @@ class Graph:
             unvisited = {node: distances[node] for node in distances if node not in visited}
             if not unvisited:
                 return None
-            "On sélectionne le noeud non visité avec la distance la plus courte comme noeud courant"
+            "on sélectionne le noeud non visité avec la distance la plus courte comme noeud courant"
             current_node = min(unvisited, key=unvisited.get)
         "on crée la liste des noeuds composant le chemin le plus court entre le noeud actuel et le noeud source"
         path = []
@@ -184,11 +185,11 @@ class Graph:
     "complexité de O(log(max_puissance)*Elog(V)) "
 
     #QUESTION 7:
-    """On implémente une méthode de représentation graphique en utilisant graphviz, on affiche en rouge le chemin ayant 
+    """On implémente une méthode de représentation graphique en utilisant le module graphviz, on affiche en rouge le chemin ayant 
     la puissance minimale qu'on a trouvé à la question 6"""
     def graphic_representation(self, src, dest, power):
         repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
-        """si le graphe n'a pas de boucle et est connexe (arbre) on utilise le min_power1 du TD 2, si le graphe n'est pas 
+        """si le graphe n'a pas de cycle et est connexe (arbre) on utilise le min_power1 du TD 2, si le graphe n'est pas 
         un arbre on utilise min_power de la question 6"""
         if self.nb_nodes == self.nb_edges +1:
             path_min_power = self.min_power1(src,dest)[1]
@@ -217,12 +218,24 @@ class Graph:
     def get_edge(self, node1, node2, power_min):
         self.edges.append((node1, node2, power_min))
 
+    #QUESTION 14: 
+    """On va créer une méthode qui étant donnés un noeud source et un noeud destination va déterminer la puissance minimale requise 
+    d'un camion pouvant couvrir le trajet entre ces deux noeuds ainsi que le chemin associé (sous forme de liste de noeuds)."""
     def min_power1(self, src, dest):
+        """on crée un dictionnaire visited qui permet de tracer si un noeuf a déjà été visité ou non en initialisant la valeur associée 
+        à chaque clé (noeud) à False"""
         visited = {node : False for node in self.nodes}
+        """on crée un dictionnaire power_min qui permet de suivre la puissance minimale requise entre le noeud source et la clé (noeud)
+        en initialisant la valeur associée à chaque clé (noeud) à -1 (cette valeur est arbitraire mais on la veut négative pour pour
+        mettre à jour la puissance minimale requise dans la fonction récursive dfs) et celle du noeud source à 0"""
         power_min = {node : -1 for node in self.nodes}
         power_min[src] = 0
         path = []
 
+        """on crée une fonction récursive dfs à l'image de celle créée lors de la première séance permettant de parcourir récursivement les
+        voisins du noeud source afin de trouver le chemin qui sépare le noeud source du noeud de destinantion (on rappelle que ce chemin est
+        unique et de poids (puissance requise) minimal puisque cette méthode va être appliquée à un arbre couvrant de poids minimal généré
+        lors de la question précédente), ainsi que la puissance minimale pour réaliser ce trajet"""
         def dfs(node, path):
             if node == dest:
                 return power_min[dest], path
@@ -230,6 +243,8 @@ class Graph:
                 neighbor, power, dist = neighbor
                 if not visited[neighbor]:
                     visited[neighbor] = True
+                    """c'est ici que l'initialisation de power_min à -1 (valeurs du dico) prend son sens, ainsi lorsque qu'un noeud est 
+                    visité pour la première fois la valeur de power_min est mise à jour puisque la valeur de power est forcément plus grande"""
                     if power_min[neighbor] < power:
                         power_min[neighbor] = power
                     result = dfs(neighbor, path + [neighbor])
@@ -237,7 +252,11 @@ class Graph:
                         return result
             return None
         
+        "on récupère le résultat de notre fonction récursive"
         result = dfs(src, [src])
+        """le chemin trouvé par notre fonction dfs est une suite de chemins partant du noeud source, jusqu'à l'arrivée au noeud destination,
+        le chemin qui nous intéresse se trouve ainsi à la fin de la liste, donc on inverse la liste (chemin) avec la fonction reversed puis
+        on récupère les dernières valeurs jusqu'au noeud source, puis on réinverse la liste"""
         if result is not None:
             for current_node in reversed(result[1]):
                 path += [current_node]
@@ -304,8 +323,7 @@ class Graph:
         return high
 
 
-
-"""
+#QUESTION 1 ET 4:
 def graph_from_file(filename):
     with open(filename, "r") as file:
         n, m = map(int, file.readline().split())
@@ -323,8 +341,8 @@ def graph_from_file(filename):
             else:
                 raise Exception("Format incorrect")
     return g
+
 """
-#QUESTION 1 ET 4:
 def graph_from_file(filename):
     f = open(filename, "r")
     with f as file:
@@ -345,24 +363,28 @@ def graph_from_file(filename):
                 raise Exception("Format incorrect")
     f.close    
     return g
+"""
 
-## Algorithme de Kruskal et structure Union-Find ##
+#QUESTION 12: Algorithme de Kruskal et structure Union-Find
 
-#La complexité de l'algorithme de Kruskal est dominée par le tri des arêtes, qui prend O(E log E) temps, où E 
-# est l'ensemble des arêtes de l'arbre couvrant de poids minimal créé (graphe connexe sans cycle).
-# Ensuite, nous parcourons toutes les arêtes triées et effectuons une opération Union-Find sur chaque arête, 
-# ce qui prend O(E alpha(V)) temps, où alpha(V) est la fonction inverse d'Ackermann et est essentiellement 
-# constante pour des tailles de graphe pratiques. 
-# En conséquence, la complexité totale de l'algorithme de Kruskal est de O(E log E) + O(E alpha(V)) = O(E log E).
-
+"""On va créer une fonction kruskal qui permet de convertir un graphe non-orienté en arbre couvrant de poids minimal. Pour cela on utilise l'
+algorithme de Kruskal ainsi que la structure de données appelée Union-Find qui permet de déterminer si l'ajout d'une arête aux arêtes
+déjà prises crée un cycle (ce que l'on veut banir car on veut un arbre connexe sans cycle)."""
 def kruskal(graph):
+    "on crée un nouvel objet avec la classe Graph qu'on appelle g_mst qui servira à stocker l'arbre couvrant de poids minimal"
     g_mst = Graph()
+    "on copie les noeuds de l'objet graph d'origine dans g_mst"
     g_mst.nodes = graph.nodes
 
     uf = UnionFind(graph.nodes)
 
+    """on trie les arêtes du graphe par ordre croissant de poids (puissance, troisième élément de chaque tuple edge) à l'aide de la fonction 
+    sorted et d'une fonction lambda"""
     edges = sorted(graph.edges, key=lambda x: x[2])
 
+    """on parcout chaque arête triée, on vérifie si les deux noeuds de l'arête n'appartiennent pas au même ensemble à l'aide de la méthode
+     find de notre classe UnionFind puis on ajoute l'arête à l'objet g_mst et on fusionne les deux ensembles à l'aide de la méthode union de
+     notre classe UnionFind"""
     for edge in edges:
         node1, node2, weight = edge
 
@@ -371,26 +393,37 @@ def kruskal(graph):
             uf.union(node1, node2)
     return g_mst
 
+"On va créer la structure de données Union-Find"
 class UnionFind:
+    "on initialise deux dictionnaires, parent et rank, qui stockent respectivement les parents et les rangs de chaque nœud dans l'ensemble"
     def __init__(self, nodes):
         self.parent = {node: node for node in nodes}
         self.rank = {node: 0 for node in nodes}
+    "on crée une méthode find qui permet de trouver la racine de l'arbre contenant un nœud donné, de manière récursive"
+    def find(self, node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find(self.parent[node])
+        return self.parent[node]
     
-    def find(self, u):
-        if self.parent[u] != u:
-            self.parent[u] = self.find(self.parent[u])
-        return self.parent[u]
-    
-    def union(self, u, v):
-        root_u = self.find(u)
-        root_v = self.find(v)
-        if root_u == root_v:
+    "on crée une méthode union qui fusionne deux ensembles contenant les nœuds 1 et 2"
+    def union(self, node1, node2):
+        root_node1 = self.find(node1)
+        root_node2 = self.find(node2)
+        if root_node1 == root_node2:
             return
-        if self.rank[root_u] < self.rank[root_v]:
-            self.parent[root_u] = root_v
-        elif self.rank[root_u] > self.rank[root_v]:
-            self.parent[root_v] = root_u
+        """si les noeuds n'appartiennent pas au même ensemble, on fusionne les deux ensembles en mettant à jour le parent de la racine 
+        ayant le plus petit rang pour qu'il pointe vers la racine ayant le plus grand rang; si les deux racines ont le même rang, on 
+        choisit arbitrairement l'une d'entre elles comme nouvelle racine et on augment son rang de 1"""
+        if self.rank[root_node1] < self.rank[root_node2]:
+            self.parent[root_node1] = root_node2
+        elif self.rank[root_node1] > self.rank[root_node2]:
+            self.parent[root_node2] = root_node1
         else:
-            self.parent[root_v] = root_u
-            self.rank[root_u] += 1
+            self.parent[root_node2] = root_node1
+            self.rank[root_node1] += 1
 
+"""La complexité de l'algorithme de Kruskal est dominée par le tri des arêtes, qui prend O(E log E) temps, où E est l'ensemble des arêtes 
+de l'arbre couvrant de poids minimal créé (graphe connexe sans cycle). Ensuite, nous parcourons toutes les arêtes triées et effectuons 
+une opération Union-Find sur chaque arête, ce qui prend O(E alpha(V)) temps, où alpha(V) est la fonction inverse d'Ackermann et est 
+essentiellement constante pour des tailles de graphe pratiques. En conséquence, la complexité totale de l'algorithme de Kruskal est 
+de O(E log E) + O(E alpha(V)) = O(E log E)."""

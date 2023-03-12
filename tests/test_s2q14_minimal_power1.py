@@ -5,7 +5,7 @@ sys.path.append("delivery_network")
 from graph import graph_from_file, kruskal
 import unittest   # The test framework
 
-class Test_MST(unittest.TestCase):
+class Test_MinimalPower1(unittest.TestCase):
     def test_network1(self):
         g = graph_from_file("input/network.1.in")
         g_mst = kruskal(g)

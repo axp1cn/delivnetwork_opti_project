@@ -54,9 +54,9 @@ Cela contredit l'hypothèse selon laquelle A est un arbre couvrant de poids mini
 de poids minimal dans G. Nous en concluons donc que le chemin P doit être entièrement contenu dans T. 
 
 """
-"""
-# Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power1
 
+# Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power1
+"""
 for i in range (1,11):
     graph = graph_from_file(data_path + "routes."+str(i)+".in")
     graph = kruskal(graph)
@@ -78,9 +78,6 @@ for i in range (1,11):
     average_speed = statistics.mean(counter)
 
     print("La vitesse d'exécution moyenne de la méthode min_power1 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
-"""
-
-# Question 15
 
 for i in range (1,11):
     f = open(data_path + "routes."+str(i)+".in", "r")
@@ -95,3 +92,4 @@ for i in range (1,11):
         y.write(str(min_power)+"\n")
     f.close()
     y.close()
+"""
