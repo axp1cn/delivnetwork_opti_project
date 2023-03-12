@@ -181,7 +181,7 @@ class Graph:
             else:
                 lower_bound = mid + 1
         "on retourne le chemin ainsi que la puissance minimale requise"
-        return (best_path, lower_bound)
+        return (lower_bound, best_path)
     "complexité de O(log(max_puissance)*Elog(V)) "
 
     #QUESTION 7:

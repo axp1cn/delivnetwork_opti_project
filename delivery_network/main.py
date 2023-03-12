@@ -20,15 +20,15 @@ print(g_mst.min_power1(1,19))"""
 """
 
 for i in range (1,11):
-    graph = graph_from_file(data_path + "routes."+str(i)+".in")
+    graph = graph_from_file(data_path + "network."+str(i)+".in")
     counter = []
     for nb_tests in range(2):
-        start_time = time.perf_counter()
         a = random.randint(1,graph.nb_nodes)
         b = random.randint(1,graph.nb_nodes)
         while a == b:
             a = random.randint(1,graph.nb_nodes)
-            b = random.randint(1,graph.nb_nodes)  
+            b = random.randint(1,graph.nb_nodes)
+        start_time = time.perf_counter()  
         print(graph.min_power(a, b))
         end_time = time.perf_counter()
         execution_time = end_time - start_time
@@ -58,19 +58,18 @@ de poids minimal dans G. Nous en concluons donc que le chemin P doit être enti�
 # Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power1
 """
 for i in range (1,11):
-    graph = graph_from_file(data_path + "routes."+str(i)+".in")
+    graph = graph_from_file(data_path + "network."+str(i)+".in")
     graph = kruskal(graph)
     counter = []
-    print (graph.nb_nodes)
     for nb_tests in range(2):
-        start_time = time.perf_counter()
         a = random.randint(1,graph.nb_nodes)
         print(a)
         b = random.randint(1,graph.nb_nodes)
         print(b)
-        while a == b and a in graph.graph and b in graph.graph:
+        while a == b and a not in graph.graph and b not in graph.graph:
             a = random.randint(1,graph.nb_nodes)
-            b = random.randint(1,graph.nb_nodes)  
+            b = random.randint(1,graph.nb_nodes)
+        start_time = time.perf_counter() 
         print(graph.min_power1(a, b))
         end_time = time.perf_counter()
         execution_time = end_time - start_time
@@ -81,7 +80,7 @@ for i in range (1,11):
 
 for i in range (1,11):
     f = open(data_path + "routes."+str(i)+".in", "r")
-    g = graph_from_file(data_path + "routes."+str(i)+".in")
+    g = graph_from_file(data_path + "network."+str(i)+".in")
     g = kruskal(g)
     dest_path = "./input/routes."+str(i)+".out"
     y = open(dest_path, "w")
