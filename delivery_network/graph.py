@@ -265,6 +265,19 @@ class Graph:
             return result[0], list(reversed(path))
         else:
             return None, []
+    #QUESTION 14 CORRIGEE:
+    def power_minimal_path(min_tree, src, dest):
+        # Calcul du chemin entre start et end dans l'arbre couvrant
+        path = [src]
+        while path[-1] != dest:
+            last_node = path[-1]
+            next_node = min(min_tree[last_node], key=min_tree[last_node].get)
+            path.append(next_node)
+
+        # Calcul de la puissance minimale nécessaire pour parcourir le chemin trouvé
+        power = max([edge[1] for node in path for edge in min_tree[node]])
+
+        return power, path
         
     #QUESTION 16:
     
