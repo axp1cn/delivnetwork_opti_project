@@ -265,45 +265,50 @@ class Graph:
             return result[0], list(reversed(path))
         else:
             return None, []
+    
+    """on veut une complexité en O(V), on a un arbre couvrant minimal min_tree, on se contente de trouver le chemin entre 
+     src et dest (qui est unique et de poids minimal) et d'avoir sa puissance minimale """
     #QUESTION 14 CORRIGEE:
-    def power_minimal_path(min_tree, src, dest):
-        # Calcul du chemin entre start et end dans l'arbre couvrant
-        path = [src]
-        while path[-1] != dest:
-            last_node = path[-1]
-            next_node = min(min_tree[last_node], key=min_tree[last_node].get)
-            path.append(next_node)
+    def find_path(self, src, dest):
+        """
+        Trouver le chemin entre deux points dans un arbre non binaire en complexité O(V).
 
-        # Calcul de la puissance minimale nécessaire pour parcourir le chemin trouvé
-        power = max([edge[1] for node in path for edge in min_tree[node]])
+        Args:
+        - src : Le nœud de départ de l'arbre.
+        - dest : Le nœud cible pour lequel nous voulons trouver le chemin.
 
-        return power, path
+        Returns:
+        - La liste des nœuds qui composent le chemin entre le nœud de départ et le nœud cible.
+        Si aucun chemin n'est trouvé, retourne None.
+        """
+        stack = [src]
+        visited = set([src])
+        parent = {src: None}
+
+        while stack:
+            node = stack.pop()
+
+            if node == dest:
+                # Nous avons trouvé le nœud que nous recherchons, donc construisons le chemin
+                path = []
+                while node:
+                    path.append(node)
+                    node = parent[node]
+                path.reverse()
+                return path
+
+            for child in node.children:
+                if child not in visited:
+                    visited.add(child)
+                    stack.append(child)
+                    parent[child] = node
+
+        # Nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin
+        return None
         
     #QUESTION 16:
     
     """il faudrait une fonction qui trouve les ancêtres et les stockent dans un dictionnaire ancestors"""
-    
-    def min_power_for_path(self, start, end):
-        # Trouver la liste des ancêtres communs entre start et end
-        common_ancestors = set(self.ancestors[start]).intersection(self.ancestors[end])
-
-        # Trier les ancêtres par ordre décroissant de puissance minimale
-        sorted_ancestors = sorted(common_ancestors, key=lambda x: self.ancestors[start][x][0], reverse=True)
-
-        # Parcourir la liste des ancêtres et trouver la puissance minimale pour chaque trajet
-        min_power = float('inf')
-        current_node = start
-        for ancestor in sorted_ancestors:
-            ancestor_power, ancestor_dist = self.ancestors[start][ancestor]
-            path_power = self.binary_search_power(current_node, ancestor, ancestor_power, ancestor_dist)
-            min_power = max(min_power, path_power)
-            current_node = ancestor
-
-        # Trouver la puissance minimale pour le dernier trajet
-        path_power = self.binary_search_power(current_node, end, 0, 1)
-        min_power = max(min_power, path_power)
-
-        return min_power
     
     def is_power_sufficient(self, start, end, power, max_dist):
         # Vérifie si la puissance power est suffisante pour couvrir le trajet entre start et end
@@ -321,9 +326,9 @@ class Graph:
             current_node = next_node
         return True
     
-    def binary_search_power(self, start, end, min_power, max_dist):
+    def binary_search_power(self, start, end, max_dist):
         # Recherche binaire pour trouver la puissance minimale pour couvrir le trajet entre start et end
-        low = min_power
+        low = 0
         high = max([edge[1] for node in self.nodes for edge in self.graph[node]])
 
         while low < high:
