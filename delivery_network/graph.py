@@ -1,4 +1,4 @@
-import graphviz
+import graphviz, math
 
 class Graph:
     """
@@ -275,37 +275,44 @@ class Graph:
     def min_power2 (self, src, dest):
     
         "on crée une fonction simple qui trouve le chemin unique entre deux noeuds, src et dest, de notre arbre couvrant de poids minimal"
-        def find_path (src, dest):
-            stack = [src]
-            visited = set([src])
-            parent = {src: None}
+    
+        stack = [src]
+        visited = set([src])
+        parent = {src: None}
+        power = {src : 0}
+        power_min = 0
 
-            while stack:
-                node = stack.pop()
-                "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin"
-                if node == dest:
-                    path = []
-                    while node:
-                        path.insert(0, node)
-                        node = parent[node]
-                    return path
+        while stack:
+            node = stack.pop()
+            "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin"
+            if node == dest:
+                path = []
+                while node:
+                    if power[node] > power_min:
+                        power_min = power[node]
+                    path.insert(0, node)
+                    node = parent[node]
+                return power_min, path
 
-                for child in self.graph[node]:
-                    child = child[0]
-                    if child not in visited:
-                        visited.add(child)
-                        stack.append(child)
-                        parent[child] = node
+            for child in self.graph[node]:
+                child , pow = child[0], child[1]
+                if child not in visited:
+                    visited.add(child)
+                    stack.append(child)
+                    parent[child] = node
+                    power[child] = pow
 
-            "nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin"
-            return None
-
+        "nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin"
+        return None
+    
+        """
+        Calcul puissance minimale trop complexe
         best_path = find_path(src, dest)
         "on cherche maintenant à déterminer la puissance minimale requise pour parcourir ce chemin"
         min_power = 0
         for i in range(len(best_path)-2):
-            """cette méthode n'est sûrement pas la plus optimée et lisible nous nous en excusons, le but étant simplement de retrouver l'
-            arête (tuple) liant les noeuds du best_path deux à deux pour en récupérer la puissance minimale requise"""
+            "cette méthode n'est sûrement pas la plus optimée et lisible nous nous en excusons, le but étant simplement de retrouver l'
+            arête (tuple) liant les noeuds du best_path deux à deux pour en récupérer la puissance minimale requise"
             next_node = self.graph[best_path[i]].index([t for t in self.graph[best_path[i]] if t[0] == best_path[i+1]][0])
             next_node1 = self.graph[best_path[i+1]].index([t for t in self.graph[best_path[i+1]] if t[0] == best_path[i+2]][0])
             "on veut retenir la valeur de puissance maximale (puissance minimale d'un camion requise pour parcourir le chemin trouvé"
@@ -315,12 +322,13 @@ class Graph:
                 min_power = self.graph[best_path[i]][next_node][1]
             
         return min_power, best_path
-
+        """   
 
     #QUESTION 16:
     
-    """il faudrait une fonction qui trouve les ancêtres et les stockent dans un dictionnaire ancestors"""
     
+    """ Essai 1
+
     def is_power_sufficient(self, start, end, power, max_dist):
         # Vérifie si la puissance power est suffisante pour couvrir le trajet entre start et end
         current_node = start
@@ -350,7 +358,63 @@ class Graph:
                 low = mid + 1
 
         return high
+    """
 
+    """Essai 2"""
+
+    def dfs(self, u, p, w, depth, max_ancestors):
+        max_ancestors[u][0] = p
+        for i in range(1, depth):
+            max_ancestors[u][i] = max_ancestors[max_ancestors[u][i-1]][i-1]
+        for v, weight in self.graph[u]:
+            if v != p:
+                self.dfs(v, u, weight, depth+1, max_ancestors)
+
+    def lca(self, u, v, depth, max_ancestors):
+        if depth[u] < depth[v]:
+            u, v = v, u
+        for i in range(depth[u]-depth[v]):
+            u = max_ancestors[u][i]
+        if u == v:
+            return u
+        for i in range(depth[u]-1, -1, -1):
+            if max_ancestors[u][i] != max_ancestors[v][i]:
+                u = max_ancestors[u][i]
+                v = max_ancestors[v][i]
+        return max_ancestors[u][0]
+
+    def query(self, u, v, depth, max_ancestors):
+        lca_uv = self.lca(u, v, depth, max_ancestors)
+        max_weight = float('-inf')
+        for i in [u, v]:
+            while i != lca_uv:
+                max_weight = max(max_weight, self.weight[(i, max_ancestors[i][0])])
+                i = max_ancestors[i][0]
+        return max_weight
+
+    def preprocess(self):
+        self.weight = dict()
+        max_depth = int(math.ceil(math.log2(self.nb_nodes)))
+        max_ancestors = {u: [None] * max_depth for u in self.nodes}
+        depth = dict()
+        for u in self.nodes:
+            depth[u] = 0
+            for v, weight in self.graph[u]:
+                depth[v] = depth[u] + 1
+        for u, v, weight in self.edges:
+            self.weight[(u, v)] = weight
+            self.weight[(v, u)] = weight
+        for u in self.nodes:
+            self.dfs(u, None, 0, 1, max_ancestors)
+        self.max_ancestors = max_ancestors
+        self.depth = depth
+
+    def solve(self, queries):
+        self.preprocess()
+        results = []
+        for query in queries:
+            results.append(self.query(*query, self.depth, self.max_ancestors))
+        return results
 
 #QUESTION 1 ET 4:
 def graph_from_file(filename):
@@ -372,6 +436,8 @@ def graph_from_file(filename):
     return g
 
 """
+Autre version de la fonction graph_from_file pour lire les fichiers routes.i.out, ce qui s'est révélé être une erreur
+
 def graph_from_file(filename):
     f = open(filename, "r")
     with f as file:
