@@ -220,7 +220,8 @@ class Graph:
 
     #QUESTION 14: 
     """On va créer une méthode qui étant donnés un noeud source et un noeud destination va déterminer la puissance minimale requise 
-    d'un camion pouvant couvrir le trajet entre ces deux noeuds ainsi que le chemin associé (sous forme de liste de noeuds)."""
+    d'un camion pouvant couvrir le trajet entre ces deux noeuds ainsi que le chemin associé (sous forme de liste de noeuds).
+    SPOILER : Cette méthode n'est pas adaptée en fin de compte (complexité plus grande que la méthode introduite juste en dessous)"""
     def min_power1(self, src, dest):
         """on crée un dictionnaire visited qui permet de tracer si un noeuf a déjà été visité ou non en initialisant la valeur associée 
         à chaque clé (noeud) à False"""
@@ -268,44 +269,54 @@ class Graph:
     
     """on veut une complexité en O(V), on a un arbre couvrant minimal min_tree, on se contente de trouver le chemin entre 
      src et dest (qui est unique et de poids minimal) et d'avoir sa puissance minimale """
+    
     #QUESTION 14 CORRIGEE:
-    def find_path(self, src, dest):
-        """
-        Trouver le chemin entre deux points dans un arbre non binaire en complexité O(V).
+    
+    def min_power2 (self, src, dest):
+    
+        "on crée une fonction simple qui trouve le chemin unique entre deux noeuds, src et dest, de notre arbre couvrant de poids minimal"
+        def find_path (src, dest):
+            stack = [src]
+            visited = set([src])
+            parent = {src: None}
 
-        Args:
-        - src : Le nœud de départ de l'arbre.
-        - dest : Le nœud cible pour lequel nous voulons trouver le chemin.
+            while stack:
+                node = stack.pop()
+                "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin"
+                if node == dest:
+                    path = []
+                    while node:
+                        path.insert(0, node)
+                        node = parent[node]
+                    return path
 
-        Returns:
-        - La liste des nœuds qui composent le chemin entre le nœud de départ et le nœud cible.
-        Si aucun chemin n'est trouvé, retourne None.
-        """
-        stack = [src]
-        visited = set([src])
-        parent = {src: None}
+                for child in self.graph[node]:
+                    child = child[0]
+                    if child not in visited:
+                        visited.add(child)
+                        stack.append(child)
+                        parent[child] = node
 
-        while stack:
-            node = stack.pop()
+            "nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin"
+            return None
 
-            if node == dest:
-                # Nous avons trouvé le nœud que nous recherchons, donc construisons le chemin
-                path = []
-                while node:
-                    path.append(node)
-                    node = parent[node]
-                path.reverse()
-                return path
+        best_path = find_path(src, dest)
+        "on cherche maintenant à déterminer la puissance minimale requise pour parcourir ce chemin"
+        min_power = 0
+        for i in range(len(best_path)-2):
+            """cette méthode n'est sûrement pas la plus optimée et lisible nous nous en excusons, le but étant simplement de retrouver l'
+            arête (tuple) liant les noeuds du best_path deux à deux pour en récupérer la puissance minimale requise"""
+            next_node = self.graph[best_path[i]].index([t for t in self.graph[best_path[i]] if t[0] == best_path[i+1]][0])
+            next_node1 = self.graph[best_path[i+1]].index([t for t in self.graph[best_path[i+1]] if t[0] == best_path[i+2]][0])
+            "on veut retenir la valeur de puissance maximale (puissance minimale d'un camion requise pour parcourir le chemin trouvé"
+            if self.graph[best_path[i]][next_node][1] < self.graph[best_path[i+1]][next_node1][1]:
+                min_power = self.graph[best_path[i+1]][next_node1][1]
+            else: 
+                min_power = self.graph[best_path[i]][next_node][1]
+            
+        return min_power, best_path
 
-            for child in node.children:
-                if child not in visited:
-                    visited.add(child)
-                    stack.append(child)
-                    parent[child] = node
 
-        # Nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin
-        return None
-        
     #QUESTION 16:
     
     """il faudrait une fonction qui trouve les ancêtres et les stockent dans un dictionnaire ancestors"""

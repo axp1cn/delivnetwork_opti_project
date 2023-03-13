@@ -4,11 +4,13 @@ import graphviz, time, random, statistics
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
 file_name = "network.1.in"
 
-
-"""g = graph_from_file(data_path + file_name)
+"""
+g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
-print(g_mst.min_power1(7,9))
-g_mst.graphic_representation(7, 9, 1000)"""
+print(g_mst.min_power1(1,19))
+print(g_mst.min_power2(1,19))
+g_mst.graphic_representation(7, 9, 1000)
+"""
 
 """print(g_mst)
 g_mst.graphic_representation(1, 19, 1000)
@@ -55,7 +57,7 @@ de poids minimal dans G. Nous en concluons donc que le chemin P doit être enti�
 
 """
 
-# Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power1
+# Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power2
 """
 for i in range (1,11):
     graph = graph_from_file(data_path + "network."+str(i)+".in")
@@ -70,7 +72,7 @@ for i in range (1,11):
             a = random.randint(1,graph.nb_nodes)
             b = random.randint(1,graph.nb_nodes)
         start_time = time.perf_counter() 
-        print(graph.min_power1(a, b))
+        print(graph.min_power2(a, b))
         end_time = time.perf_counter()
         execution_time = end_time - start_time
         counter.append(execution_time)
@@ -88,7 +90,7 @@ for i in range (1,11):
     lines = f.readlines()
     for j in range(1,len(lines)):
         lines[j] = lines[j].split()
-        min_power, path = g.min_power1(int(lines[j][0]), int(lines[j][1]))
+        min_power, path = g.min_power2(int(lines[j][0]), int(lines[j][1]))
         y.write(str(min_power)+"\n")
     f.close()
     y.close()
