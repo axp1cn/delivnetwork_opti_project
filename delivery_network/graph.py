@@ -28,6 +28,10 @@ class Graph:
         self.nb_nodes = len(nodes)
         self.nb_edges = 0
         self.edges = []
+        "on ajoute des attributs nécessaires à la question 16"
+        self.max_ancestors = dict()
+        self.weight = dict()
+        self.depth = dict()
     
 
     def __str__(self):
@@ -239,7 +243,7 @@ class Graph:
         lors de la question précédente), ainsi que la puissance minimale pour réaliser ce trajet"""
         def dfs(node, path):
             if node == dest:
-                return power_min[dest], path
+                return power_min, path
             for neighbor in self.graph[node]:
                 neighbor, power, dist = neighbor
                 if not visited[neighbor]:
@@ -263,7 +267,7 @@ class Graph:
                 path += [current_node]
                 if current_node == src:
                     break
-            return result[0], list(reversed(path))
+            return max(result[0][u] for u in path), list(reversed(path))
         else:
             return None, []
     
@@ -362,44 +366,13 @@ class Graph:
 
     """Essai 2"""
 
-    def dfs(self, u, p, w, depth, max_ancestors):
-        max_ancestors[u][0] = p
-        for i in range(1, depth):
-            max_ancestors[u][i] = max_ancestors[max_ancestors[u][i-1]][i-1]
-        for v, weight in self.graph[u]:
-            if v != p:
-                self.dfs(v, u, weight, depth+1, max_ancestors)
-
-    def lca(self, u, v, depth, max_ancestors):
-        if depth[u] < depth[v]:
-            u, v = v, u
-        for i in range(depth[u]-depth[v]):
-            u = max_ancestors[u][i]
-        if u == v:
-            return u
-        for i in range(depth[u]-1, -1, -1):
-            if max_ancestors[u][i] != max_ancestors[v][i]:
-                u = max_ancestors[u][i]
-                v = max_ancestors[v][i]
-        return max_ancestors[u][0]
-
-    def query(self, u, v, depth, max_ancestors):
-        lca_uv = self.lca(u, v, depth, max_ancestors)
-        max_weight = float('-inf')
-        for i in [u, v]:
-            while i != lca_uv:
-                max_weight = max(max_weight, self.weight[(i, max_ancestors[i][0])])
-                i = max_ancestors[i][0]
-        return max_weight
-
     def preprocess(self):
-        self.weight = dict()
         max_depth = int(math.ceil(math.log2(self.nb_nodes)))
         max_ancestors = {u: [None] * max_depth for u in self.nodes}
         depth = dict()
         for u in self.nodes:
             depth[u] = 0
-            for v, weight in self.graph[u]:
+            for v, weight, dist in self.graph[u]:
                 depth[v] = depth[u] + 1
         for u, v, weight in self.edges:
             self.weight[(u, v)] = weight
@@ -408,6 +381,37 @@ class Graph:
             self.dfs(u, None, 0, 1, max_ancestors)
         self.max_ancestors = max_ancestors
         self.depth = depth
+
+    def dfs(self, u, p, w, depth, max_ancestors):
+        max_ancestors[u][0] = p
+        max_depth = int(math.ceil(math.log2(self.nb_nodes)))
+        for i in range(1, depth):
+            max_ancestors[u][i] = max_ancestors.get(max_ancestors[u][i-1], [None]*max_depth)[i-1]
+        for v, weight, dist in self.graph[u]:
+            if v != p:
+                self.dfs(v, u, weight, depth+1, max_ancestors)
+
+    def lca(self, u, v, depth):
+        if depth[u] < depth[v]:
+            u, v = v, u
+        for i in range(depth[u]-depth[v]):
+            u = self.max_ancestors[u][i]
+        if u == v:
+            return u
+        for i in range(depth[u]-1, -1, -1):
+            if self.max_ancestors[u][i] != self.max_ancestors[v][i]:
+                u = self.max_ancestors[u][i]
+                v = self.max_ancestors[v][i]
+        return self.max_ancestors[u][0]
+
+    def query(self, u, v, depth):
+        lca_uv = self.lca(u, v, depth)
+        max_weight = float('-inf')
+        for i in [u, v]:
+            while i != lca_uv:
+                max_weight = max(max_weight, self.weight[(i, self.max_ancestors[i][0])])
+                i = self.max_ancestors[i][0]
+        return max_weight
 
     def solve(self, queries):
         self.preprocess()

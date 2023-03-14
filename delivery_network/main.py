@@ -4,12 +4,14 @@ import graphviz, time, random, statistics
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
 file_name = "network.1.in"
 
-"""
+
 g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
 print(g_mst.min_power1(1,19))
 print(g_mst.min_power2(1,19))
+print(g_mst.solve((1,19)))
 
+"""
 g_mst.graphic_representation(7, 9, 1000)
 """
 
