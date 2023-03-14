@@ -9,7 +9,7 @@ g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
 print(g_mst.min_power1(1,19))
 print(g_mst.min_power2(1,19))
-print(g_mst.solve((1,19)))
+
 
 """
 g_mst.graphic_representation(7, 9, 1000)

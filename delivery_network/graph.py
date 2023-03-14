@@ -288,7 +288,7 @@ class Graph:
 
         while stack:
             node = stack.pop()
-            "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin"
+            "nous avons trouvé le nœud que nous recherchons, donc construisons le chemin !"
             if node == dest:
                 path = []
                 while node:
