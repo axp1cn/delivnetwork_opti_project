@@ -2,24 +2,14 @@ from graph import Graph, graph_from_file, kruskal
 import graphviz, time, random, statistics
 
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
-file_name = "network.1.in"
+file_name = "network.2.in"
 
 
-g = graph_from_file(data_path + file_name)
+"""g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
-print(g_mst.min_power1(1,19))
-print(g_mst.min_power2(1,19))
+print(g_mst.min_power1(5,18))
+print(g_mst.min_power2(5,18))"""
 
-
-"""
-g_mst.graphic_representation(7, 9, 1000)
-"""
-
-"""print(g_mst)
-g_mst.graphic_representation(1, 19, 1000)
-print(g_mst.min_power1(random.randrange(1,g_mst.nb_nodes+1), random.randrange(1,g_mst.nb_nodes+1)))
-print(g_mst.min_power1(random.randrange(1,g_mst.nb_nodes+1), random.randrange(1,g_mst.nb_nodes+1)))
-print(g_mst.min_power1(1,19))"""
 
 # Question 10 : Calcul de la vitesse d'exécution du code développé dans la séance 1, en particulier la méthode min_power
 """
@@ -34,7 +24,7 @@ for i in range (1,11):
             a = random.randint(1,graph.nb_nodes)
             b = random.randint(1,graph.nb_nodes)
         start_time = time.perf_counter()  
-        print(graph.min_power(a, b))
+        print(graph.min_power1(a, b))
         end_time = time.perf_counter()
         execution_time = end_time - start_time
         counter.append(execution_time)
@@ -60,8 +50,9 @@ de poids minimal dans G. Nous en concluons donc que le chemin P doit être enti�
 
 """
 
-# Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power2
 """
+# Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power2
+
 for i in range (1,11):
     graph = graph_from_file(data_path + "network."+str(i)+".in")
     graph = kruskal(graph)
@@ -81,9 +72,10 @@ for i in range (1,11):
         counter.append(execution_time)
     average_speed = statistics.mean(counter)
 
-    print("La vitesse d'exécution moyenne de la méthode min_power1 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
+    print("La vitesse d'exécution moyenne de la méthode min_power2 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
 """
 
+"""
 for i in range (1,11):
     f = open(data_path + "routes."+str(i)+".in", "r")
     g = graph_from_file(data_path + "network."+str(i)+".in")
@@ -97,3 +89,4 @@ for i in range (1,11):
         y.write(str(min_power)+"\n")
     f.close()
     y.close()
+"""
