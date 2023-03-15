@@ -2,13 +2,15 @@ from graph import Graph, graph_from_file, kruskal
 import graphviz, time, random, statistics
 
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
-file_name = "network.2.in"
+file_name = "network.1.in"
 
 
-"""g = graph_from_file(data_path + file_name)
+g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
 print(g_mst.min_power1(5,18))
-print(g_mst.min_power2(5,18))"""
+print(g_mst.min_power2(5,18))
+
+g_mst.graphic_representation(5,18,1000)
 
 
 # Question 10 : Calcul de la vitesse d'exécution du code développé dans la séance 1, en particulier la méthode min_power

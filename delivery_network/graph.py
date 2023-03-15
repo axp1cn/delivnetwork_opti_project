@@ -193,10 +193,10 @@ class Graph:
     la puissance minimale qu'on a trouvé à la question 6"""
     def graphic_representation(self, src, dest, power):
         repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
-        """si le graphe n'a pas de cycle et est connexe (arbre) on utilise le min_power1 du TD 2, si le graphe n'est pas 
+        """si le graphe n'a pas de cycle et est connexe (arbre) on utilise le min_power2 du TD 2, si le graphe n'est pas 
         un arbre on utilise min_power de la question 6"""
         if self.nb_nodes == self.nb_edges +1:
-            path_min_power = self.min_power1(src,dest)[1]
+            path_min_power = self.min_power2(src,dest)[1]
         
         else:
             path_min_power = self.min_power(src, dest)[1]
@@ -326,7 +326,7 @@ class Graph:
                 min_power = self.graph[best_path[i]][next_node][1]
             
         return min_power, best_path
-        """   
+        """ 
 
     #QUESTION 16:
     
