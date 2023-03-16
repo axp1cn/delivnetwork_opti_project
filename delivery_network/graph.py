@@ -32,6 +32,9 @@ class Graph:
         self.max_ancestors = dict()
         self.weight = dict()
         self.depth = dict()
+        self.profondeur = dict()
+        self.parents = []
+        self.root = 2
     
 
     def __str__(self):
@@ -279,15 +282,16 @@ class Graph:
     def dfs14(self, root=None, profondeur=None, parents=None, visited=None, index=0 ):
         if visited is None and profondeur is None and parents is None and root is None:
             visited=set()
-            profondeur=[0 for i in self.nodes]
+            profondeur=dict()
             parents=[0 for i in self.nodes]
-            self.root = root = 2
+            root = self.root
+            profondeur[root]=0
             parents[root]=root
         visited.add(root)
         index+=1
         for son in self.graph[root]:
             if son[0] not in visited:
-                profondeur[son[0]]+=index
+                profondeur[son[0]]=index
                 parents[son[0]]= root
                 self.dfs14(son[0], profondeur, parents, visited, index)
             else:
@@ -308,16 +312,54 @@ class Graph:
             if self.parents[node2] != node2:
                 node2=self.parents[node2]
                 path2.append(node2)
-        while path2[-1]==path1[-1]:
-            if path2[-1] == self.root:
-                continue
-            if len(path2)>=len(path1):
-                path2.pop(-1)
-            else:
-                path1.pop(-1)
-        path2.pop(-1)
+        print(path1)
         path=path1+list(reversed(path2))
         return path
+    
+    def min_power4(self,src,dest):
+        path1 = []
+        path2 = []
+        if self.profondeur[src]>self.profondeur[dest]:
+            node = src
+            path2 = [dest]
+            while self.profondeur[node]!= self.profondeur[dest]:
+                path1.append(node)
+                node = self.parents[node]
+            path1.append(node)
+            node1 = node
+            node2 = dest 
+            while node1 != node2:
+                path1.append(self.parents[node1])
+                node1 = self.parents[node1]
+                path2.append(self.parents[node2])
+                node2 = self.parents[node2]
+        if self.profondeur[src]<=self.profondeur[dest]:
+            node = dest
+            path1 = [src]
+            while self.profondeur[node]!= self.profondeur[src]:
+                path2.append(node)
+                node = self.parents[node]
+            path2.append(node)
+            node2 = node
+            node1 = src 
+            while node1 != node2:
+                path1.append(self.parents[node1])
+                node1 = self.parents[node1]
+                path2.append(self.parents[node2])
+                node2 = self.parents[node2]
+        path1.pop(-1)
+        path=path1+list(reversed(path2))
+        "on cherche maintenant à déterminer la puissance minimale requise pour parcourir ce chemin"
+        min_power = 0
+        for i in range(len(path)-2):
+            next_node = self.graph[path[i]].index([t for t in self.graph[path[i]] if t[0] == path[i+1]][0])
+            next_node1 = self.graph[path[i+1]].index([t for t in self.graph[path[i+1]] if t[0] == path[i+2]][0])
+            if self.graph[path[i]][next_node][1] < self.graph[path[i+1]][next_node1][1]:
+                min_power = self.graph[path[i+1]][next_node1][1]
+            else: 
+                min_power = self.graph[path[i]][next_node][1]
+
+        return min_power, path
 
     
     def min_power2 (self, src, dest):

@@ -2,15 +2,18 @@ from graph import Graph, graph_from_file, kruskal
 import graphviz, time, random, statistics
 
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
-file_name = "network.1.in"
-    
-g = graph_from_file(data_path )
+file_name = "network.7.in"
 
+
+g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
-print(g_mst.min_power1(5,18))
-print(g_mst.min_power2(5,18))
-
-g_mst.graphic_representation(5,18,1000)
+g_mst.dfs14()
+print(g_mst.profondeur[3], g_mst.profondeur[4])
+print(g_mst.min_power4(3,4))
+print(g_mst.min_power1(3,4))
+"""
+print(g.min_power(4,3))
+g_mst.graphic_representation(5,18,1000)"""
 
 
 # Question 10 : Calcul de la vitesse d'exécution du code développé dans la séance 1, en particulier la méthode min_power
@@ -51,13 +54,14 @@ Cela contredit l'hypothèse selon laquelle A est un arbre couvrant de poids mini
 de poids minimal dans G. Nous en concluons donc que le chemin P doit être entièrement contenu dans T. 
 
 """
-"""
 
+"""
 # Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power2
 
 for i in range (1,11):
     graph = graph_from_file(data_path + "network."+str(i)+".in")
     graph = kruskal(graph)
+    graph.dfs14()
     counter = []
     for nb_tests in range(2):
         a = random.randint(1,graph.nb_nodes)
@@ -68,7 +72,7 @@ for i in range (1,11):
             a = random.randint(1,graph.nb_nodes)
             b = random.randint(1,graph.nb_nodes)
         start_time = time.perf_counter() 
-        print(graph.min_power1(a, b))
+        print(graph.min_power4(a, b))
         end_time = time.perf_counter()
         execution_time = end_time - start_time
         counter.append(execution_time)
