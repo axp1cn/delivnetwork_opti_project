@@ -275,6 +275,50 @@ class Graph:
      src et dest (qui est unique et de poids minimal) et d'avoir sa puissance minimale """
     
     #QUESTION 14 CORRIGEE:
+
+    def dfs14(self, root=None, profondeur=None, parents=None, visited=None, index=0 ):
+        if visited is None and profondeur is None and parents is None and root is None:
+            visited=set()
+            profondeur=[0 for i in self.nodes]
+            parents=[0 for i in self.nodes]
+            self.root = root = 2
+            parents[root]=root
+        visited.add(root)
+        index+=1
+        for son in self.graph[root]:
+            if son[0] not in visited:
+                profondeur[son[0]]+=index
+                parents[son[0]]= root
+                self.dfs14(son[0], profondeur, parents, visited, index)
+            else:
+                pass
+        self.profondeur = profondeur
+        self.parents = parents
+        return None
+   
+    def min_power3(self, src, dest):
+        node1=src
+        node2=dest
+        path1=[src]
+        path2=[dest]
+        while node1 not in path2 or node2 not in path1:
+            if self.parents[node1] != node1:
+                node1=self.parents[node1]
+                path1.append(node1)
+            if self.parents[node2] != node2:
+                node2=self.parents[node2]
+                path2.append(node2)
+        while path2[-1]==path1[-1]:
+            if path2[-1] == self.root:
+                continue
+            if len(path2)>=len(path1):
+                path2.pop(-1)
+            else:
+                path1.pop(-1)
+        path2.pop(-1)
+        path=path1+list(reversed(path2))
+        return path
+
     
     def min_power2 (self, src, dest):
     

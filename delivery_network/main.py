@@ -1,26 +1,14 @@
 from graph import Graph, graph_from_file, kruskal
 import graphviz, time, random, statistics
 
-data_path = "input/network.9.in"
-
-
-
-
+data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
+file_name = "network.1.in"
     
 g = graph_from_file(data_path )
 
 g_mst = kruskal(g)
-<<<<<<< HEAD
-
-t0=time.time()
-print(g.min_power1(1,19))
-tf=time.time()
-print(tf-t0)
-print(g_mst.min_power2(1,19))
-=======
 print(g_mst.min_power1(5,18))
 print(g_mst.min_power2(5,18))
->>>>>>> f6179b3af76feebea8168008330ed420f53a48b9
 
 g_mst.graphic_representation(5,18,1000)
 
@@ -63,7 +51,7 @@ Cela contredit l'hypothèse selon laquelle A est un arbre couvrant de poids mini
 de poids minimal dans G. Nous en concluons donc que le chemin P doit être entièrement contenu dans T. 
 
 """
-
+"""
 
 # Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power2
 
@@ -86,14 +74,9 @@ for i in range (1,11):
         counter.append(execution_time)
     average_speed = statistics.mean(counter)
 
-<<<<<<< HEAD
-    print("La vitesse d'exécution moyenne de la méthode min_power1 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
-"""
-=======
     print("La vitesse d'exécution moyenne de la méthode min_power2 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
+"""
 
-
->>>>>>> f6179b3af76feebea8168008330ed420f53a48b9
 """
 for i in range (1,11):
     f = open(data_path + "routes."+str(i)+".in", "r")
@@ -108,22 +91,4 @@ for i in range (1,11):
         y.write(str(min_power)+"\n")
     f.close()
     y.close()
-<<<<<<< HEAD
 """
-
-
-"""
-n=100
-t_tot=0
-for i in range(n):
-    [i,j]=[random.randrange(1,n+1)]*2
-    t0=time.time()
-    g2.min_power2(i,j)
-    tf=time.time()
-    t_tot+=tf-t0
-
-print (t_tot/n)
-"""
-=======
-"""
->>>>>>> f6179b3af76feebea8168008330ed420f53a48b9
