@@ -353,12 +353,8 @@ class Graph:
         min_power = 0
         for i in range(len(path)-2):
             next_node = self.graph[path[i]].index([t for t in self.graph[path[i]] if t[0] == path[i+1]][0])
-            next_node1 = self.graph[path[i+1]].index([t for t in self.graph[path[i+1]] if t[0] == path[i+2]][0])
-            if self.graph[path[i]][next_node][1] < self.graph[path[i+1]][next_node1][1]:
-                min_power = self.graph[path[i+1]][next_node1][1]
-            else: 
+            if self.graph[path[i]][next_node][1] > min_power:
                 min_power = self.graph[path[i]][next_node][1]
-
         return min_power, path
 
     

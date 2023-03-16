@@ -2,18 +2,18 @@ from graph import Graph, graph_from_file, kruskal
 import graphviz, time, random, statistics
 
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
-file_name = "network.7.in"
+file_name = "network.1.in"
 
-
+"""
 g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
 g_mst.dfs14()
 print(g_mst.profondeur[3], g_mst.profondeur[4])
 print(g_mst.min_power4(3,4))
 print(g_mst.min_power1(3,4))
-"""
+
 print(g.min_power(4,3))
-g_mst.graphic_representation(5,18,1000)"""
+g_mst.graphic_representation(5,5,1000)"""
 
 
 # Question 10 : Calcul de la vitesse d'exécution du code développé dans la séance 1, en particulier la méthode min_power
@@ -86,12 +86,13 @@ for i in range (1,11):
     f = open(data_path + "routes."+str(i)+".in", "r")
     g = graph_from_file(data_path + "network."+str(i)+".in")
     g = kruskal(g)
+    g.dfs14()
     dest_path = "./input/routes."+str(i)+".out"
     y = open(dest_path, "w")
     lines = f.readlines()
     for j in range(1,len(lines)):
         lines[j] = lines[j].split()
-        min_power, path = g.min_power2(int(lines[j][0]), int(lines[j][1]))
+        min_power, path = g.min_power4(int(lines[j][0]), int(lines[j][1]))
         y.write(str(min_power)+"\n")
     f.close()
     y.close()
