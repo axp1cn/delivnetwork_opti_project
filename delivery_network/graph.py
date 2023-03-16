@@ -193,10 +193,10 @@ class Graph:
     la puissance minimale qu'on a trouvé à la question 6"""
     def graphic_representation(self, src, dest, power):
         repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
-        """si le graphe n'a pas de cycle et est connexe (arbre) on utilise le min_power1 du TD 2, si le graphe n'est pas 
+        """si le graphe n'a pas de cycle et est connexe (arbre) on utilise le min_power2 du TD 2, si le graphe n'est pas 
         un arbre on utilise min_power de la question 6"""
         if self.nb_nodes == self.nb_edges +1:
-            path_min_power = self.min_power1(src,dest)[1]
+            path_min_power = self.min_power2(src,dest)[1]
         
         else:
             path_min_power = self.min_power(src, dest)[1]
@@ -326,7 +326,7 @@ class Graph:
                 min_power = self.graph[best_path[i]][next_node][1]
             
         return min_power, best_path
-        """   
+        """ 
 
     #QUESTION 16:
     
@@ -420,7 +420,9 @@ class Graph:
             results.append(self.query(*query, self.depth, self.max_ancestors))
         return results
 
-#QUESTION 1 ET 4:
+"""
+Version initiale de la fonction graph_from_file
+
 def graph_from_file(filename):
     with open(filename, "r") as file:
         n, m = map(int, file.readline().split())
@@ -440,14 +442,16 @@ def graph_from_file(filename):
     return g
 
 """
-Autre version de la fonction graph_from_file pour lire les fichiers routes.i.out, ce qui s'est révélé être une erreur
+
+#QUESTION 1 ET 4:
 
 def graph_from_file(filename):
+    "Nouvelle version de la fonction graph_from_file car les distances du fichiers routes.10.in sont des floats"
     f = open(filename, "r")
     with f as file:
+        n, m = map(int, f.readline().split())
+        g = Graph(list(range(1, n+1)))
         lines = f.readlines()
-        line1 = lines.pop(0).split()
-        g = Graph([i for i in range(1,int(line1[0])+1)])
         for i in range(len(lines)):
             lines[i] = lines[i].split()
             if len(lines[i]) == 3:
@@ -456,13 +460,13 @@ def graph_from_file(filename):
                 g.get_edge(int(node1), int(node2), int(power_min))
             elif len(lines[i]) == 4:
                 node1, node2, power_min, dist = lines[i]
-                g.add_edge(int(node1), int(node2), int(power_min), int(dist))
+                g.add_edge(int(node1), int(node2), int(power_min), float(dist))
                 g.get_edge(int(node1), int(node2), int(power_min))
             else:
                 raise Exception("Format incorrect")
     f.close    
     return g
-"""
+
 
 #QUESTION 12: Algorithme de Kruskal et structure Union-Find
 
