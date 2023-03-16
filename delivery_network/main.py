@@ -52,7 +52,7 @@ de poids minimal dans G. Nous en concluons donc que le chemin P doit être enti�
 
 """
 
-"""
+
 # Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power2
 
 for i in range (1,11):
@@ -68,14 +68,14 @@ for i in range (1,11):
             a = random.randint(1,graph.nb_nodes)
             b = random.randint(1,graph.nb_nodes)
         start_time = time.perf_counter() 
-        print(graph.min_power2(a, b))
+        print(graph.min_power1(a, b))
         end_time = time.perf_counter()
         execution_time = end_time - start_time
         counter.append(execution_time)
     average_speed = statistics.mean(counter)
 
     print("La vitesse d'exécution moyenne de la méthode min_power2 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
-"""
+
 
 """
 for i in range (1,11):
