@@ -1,4 +1,5 @@
 import graphviz, math
+from math import log2
 
 class Graph:
     """
@@ -28,13 +29,12 @@ class Graph:
         self.nb_nodes = len(nodes)
         self.nb_edges = 0
         self.edges = []
-        "on ajoute des attributs nécessaires à la question 16"
-        self.max_ancestors = dict()
         self.weight = dict()
+        "on ajoute des attributs nécessaires aux questions 14 et 16"
         self.depth = dict()
-        self.profondeur = dict()
         self.parents = []
-        self.root = 2
+        self.root = 1
+        self.max_anc = []
     
 
     def __str__(self):
@@ -225,7 +225,75 @@ class Graph:
     def get_edge(self, node1, node2, power_min):
         self.edges.append((node1, node2, power_min))
 
-    #QUESTION 14: 
+    #QUESTION 14:
+
+    """On crée un pré-processing qui calcule la profondeur ainsi que les parents de chaque noeud du graphe par rapport à un noeud
+    racine initialisé dans les attributs de l'objet Graph() à 1 (self.root = 1), car le noeud 1 est dans tous les graphs."""
+    def dfs14(self, root=None, depth=None, parents=None, visited=None, index=0 ):
+        if visited is None and depth is None and parents is None and root is None:
+            visited=set()
+            depth=dict()
+            parents=[0 for i in self.nodes]
+            root = self.root
+            depth[root]=0
+            parents[root]=root
+        visited.add(root)
+        index+=1
+        for son in self.graph[root]:
+            if son[0] not in visited:
+                depth[son[0]]=index
+                parents[son[0]]= root
+                self.dfs14(son[0], depth, parents, visited, index)
+            else:
+                pass
+        self.depth = depth
+        self.parents = parents
+        return None
+
+    def min_power4(self,src,dest):
+        path1 = []
+        path2 = []
+        "on identifie quel noeud, entre src et dest, est le plus éloigné du noeud racine, pour remonter par celui-ci"
+        if self.depth[src]>self.depth[dest]:
+            node = src
+            path2 = [dest]
+            while self.depth[node]!= self.depth[dest]:
+                path1.append(node)
+                node = self.parents[node]
+            path1.append(node)
+            node1 = node
+            node2 = dest 
+            while node1 != node2:
+                path1.append(self.parents[node1])
+                node1 = self.parents[node1]
+                path2.append(self.parents[node2])
+                node2 = self.parents[node2]
+        else:
+            node = dest
+            path1 = [src]
+            while self.depth[node]!= self.depth[src]:
+                path2.append(node)
+                node = self.parents[node]
+            path2.append(node)
+            node2 = node
+            node1 = src 
+            while node1 != node2:
+                path1.append(self.parents[node1])
+                node1 = self.parents[node1]
+                path2.append(self.parents[node2])
+                node2 = self.parents[node2]
+        path1.pop(-1)
+        path=path1+list(reversed(path2))
+        "on cherche maintenant à déterminer la puissance minimale requise pour parcourir ce chemin"
+        min_power = 0
+        for i in range(len(path)-2):
+            next_node = self.graph[path[i]].index([t for t in self.graph[path[i]] if t[0] == path[i+1]][0])
+            if self.graph[path[i]][next_node][1] > min_power:
+                min_power = self.graph[path[i]][next_node][1]
+        return min_power, path
+    
+    # Q14 Essais (min_power1/2/3)
+
     """On va créer une méthode qui étant donnés un noeud source et un noeud destination va déterminer la puissance minimale requise 
     d'un camion pouvant couvrir le trajet entre ces deux noeuds ainsi que le chemin associé (sous forme de liste de noeuds).
     SPOILER : Cette méthode n'est pas adaptée en fin de compte (complexité plus grande que la méthode introduite juste en dessous)"""
@@ -277,87 +345,6 @@ class Graph:
     """on veut une complexité en O(V), on a un arbre couvrant minimal min_tree, on se contente de trouver le chemin entre 
      src et dest (qui est unique et de poids minimal) et d'avoir sa puissance minimale """
     
-    #QUESTION 14 CORRIGEE:
-
-    def dfs14(self, root=None, profondeur=None, parents=None, visited=None, index=0 ):
-        if visited is None and profondeur is None and parents is None and root is None:
-            visited=set()
-            profondeur=dict()
-            parents=[0 for i in self.nodes]
-            root = self.root
-            profondeur[root]=0
-            parents[root]=root
-        visited.add(root)
-        index+=1
-        for son in self.graph[root]:
-            if son[0] not in visited:
-                profondeur[son[0]]=index
-                parents[son[0]]= root
-                self.dfs14(son[0], profondeur, parents, visited, index)
-            else:
-                pass
-        self.profondeur = profondeur
-        self.parents = parents
-        return None
-   
-    def min_power3(self, src, dest):
-        node1=src
-        node2=dest
-        path1=[src]
-        path2=[dest]
-        while node1 not in path2 or node2 not in path1:
-            if self.parents[node1] != node1:
-                node1=self.parents[node1]
-                path1.append(node1)
-            if self.parents[node2] != node2:
-                node2=self.parents[node2]
-                path2.append(node2)
-        print(path1)
-        path=path1+list(reversed(path2))
-        return path
-    
-    def min_power4(self,src,dest):
-        path1 = []
-        path2 = []
-        if self.profondeur[src]>self.profondeur[dest]:
-            node = src
-            path2 = [dest]
-            while self.profondeur[node]!= self.profondeur[dest]:
-                path1.append(node)
-                node = self.parents[node]
-            path1.append(node)
-            node1 = node
-            node2 = dest 
-            while node1 != node2:
-                path1.append(self.parents[node1])
-                node1 = self.parents[node1]
-                path2.append(self.parents[node2])
-                node2 = self.parents[node2]
-        if self.profondeur[src]<=self.profondeur[dest]:
-            node = dest
-            path1 = [src]
-            while self.profondeur[node]!= self.profondeur[src]:
-                path2.append(node)
-                node = self.parents[node]
-            path2.append(node)
-            node2 = node
-            node1 = src 
-            while node1 != node2:
-                path1.append(self.parents[node1])
-                node1 = self.parents[node1]
-                path2.append(self.parents[node2])
-                node2 = self.parents[node2]
-        path1.pop(-1)
-        path=path1+list(reversed(path2))
-        "on cherche maintenant à déterminer la puissance minimale requise pour parcourir ce chemin"
-        min_power = 0
-        for i in range(len(path)-2):
-            next_node = self.graph[path[i]].index([t for t in self.graph[path[i]] if t[0] == path[i+1]][0])
-            if self.graph[path[i]][next_node][1] > min_power:
-                min_power = self.graph[path[i]][next_node][1]
-        return min_power, path
-
-    
     def min_power2 (self, src, dest):
     
         "on crée une fonction simple qui trouve le chemin unique entre deux noeuds, src et dest, de notre arbre couvrant de poids minimal"
@@ -391,8 +378,8 @@ class Graph:
         "nous n'avons pas trouvé le nœud que nous recherchions, donc il n'y a pas de chemin"
         return None
     
-        """
-        Calcul puissance minimale trop complexe
+        
+        """Calcul puissance minimale trop complexe
         best_path = find_path(src, dest)
         "on cherche maintenant à déterminer la puissance minimale requise pour parcourir ce chemin"
         min_power = 0
@@ -408,102 +395,95 @@ class Graph:
                 min_power = self.graph[best_path[i]][next_node][1]
             
         return min_power, best_path
-        """ 
+        """
+    
+    def min_power3(self, src, dest):
+        node1=src
+        node2=dest
+        path1=[src]
+        path2=[dest]
+        while node1 not in path2 or node2 not in path1:
+            if self.parents[node1] != node1:
+                node1=self.parents[node1]
+                path1.append(node1)
+            if self.parents[node2] != node2:
+                node2=self.parents[node2]
+                path2.append(node2)
+        print(path1)
+        path=path1+list(reversed(path2))
+        return path
+    
 
     #QUESTION 16:
-    
-    
-    """ Essai 1
 
-    def is_power_sufficient(self, start, end, power, max_dist):
-        # Vérifie si la puissance power est suffisante pour couvrir le trajet entre start et end
-        current_node = start
-        while current_node != end:
-            next_node, next_power, next_dist = None, None, None
-            for neighbor, neighbor_power, neighbor_dist in self.graph[current_node]:
-                if neighbor == self.ancestors[current_node][0]:
-                    next_node, next_power, next_dist = neighbor, neighbor_power, neighbor_dist
-                    break
-            if next_node is None or next_dist > max_dist or next_power < power:
-                return False
-            max_dist -= next_dist
-            power -= next_dist
-            current_node = next_node
-        return True
-    
-    def binary_search_power(self, start, end, max_dist):
-        # Recherche binaire pour trouver la puissance minimale pour couvrir le trajet entre start et end
-        low = 0
-        high = max([edge[1] for node in self.nodes for edge in self.graph[node]])
-
-        while low < high:
-            mid = (low + high) // 2
-            if self.is_power_sufficient(start, end, mid, max_dist):
-                high = mid
-            else:
-                low = mid + 1
-
-        return high
-    """
-
-    """Essai 2"""
-
-    def preprocess(self):
-        max_depth = int(math.ceil(math.log2(self.nb_nodes)))
-        max_ancestors = {u: [None] * max_depth for u in self.nodes}
-        depth = dict()
-        for u in self.nodes:
-            depth[u] = 0
-            for v, weight, dist in self.graph[u]:
-                depth[v] = depth[u] + 1
-        for u, v, weight in self.edges:
-            self.weight[(u, v)] = weight
-            self.weight[(v, u)] = weight
-        for u in self.nodes:
-            self.dfs(u, None, 0, 1, max_ancestors)
-        self.max_ancestors = max_ancestors
+    def dfs15(self, root=None, visited=None, depth=None, parents=None, max_anc=None):
+        if visited is None and depth is None and parents is None and max_anc is None:
+            visited=set()
+            depth=dict()
+            parents=[0 for i in self.nodes]
+            root = self.root
+            depth[root]=0
+            parents[root]=root
+            max_anc = [[0] * (int(log2(self.nb_nodes))+1) for i in range(self.nb_nodes + 1)]
+        visited.add(root)
+        for son in self.graph[root]:
+            if son[0] not in visited:
+                depth[son[0]] = depth[root] + 1
+                parents[son[0]] = root
+                max_anc[son[0]][0] = son[1]  # poids de l'arête entre le sommet courant et son fils
+                for i in range(1, int(log2(self.nb_nodes)) + 1):
+                    max_anc[son[0]][i] = max(max_anc[son[0]][i-1], max_anc[parents[son[0]]][i-1])
+                self.dfs15(son[0], visited, depth, parents, max_anc)
         self.depth = depth
-
-    def dfs(self, u, p, w, depth, max_ancestors):
-        max_ancestors[u][0] = p
-        max_depth = int(math.ceil(math.log2(self.nb_nodes)))
-        for i in range(1, depth):
-            max_ancestors[u][i] = max_ancestors.get(max_ancestors[u][i-1], [None]*max_depth)[i-1]
-        for v, weight, dist in self.graph[u]:
-            if v != p:
-                self.dfs(v, u, weight, depth+1, max_ancestors)
-
-    def lca(self, u, v, depth):
-        if depth[u] < depth[v]:
-            u, v = v, u
-        for i in range(depth[u]-depth[v]):
-            u = self.max_ancestors[u][i]
-        if u == v:
-            return u
-        for i in range(depth[u]-1, -1, -1):
-            if self.max_ancestors[u][i] != self.max_ancestors[v][i]:
-                u = self.max_ancestors[u][i]
-                v = self.max_ancestors[v][i]
-        return self.max_ancestors[u][0]
-
-    def query(self, u, v, depth):
-        lca_uv = self.lca(u, v, depth)
-        max_weight = float('-inf')
-        for i in [u, v]:
-            while i != lca_uv:
-                max_weight = max(max_weight, self.weight[(i, self.max_ancestors[i][0])])
-                i = self.max_ancestors[i][0]
-        return max_weight
-
-    def solve(self, queries):
-        self.preprocess()
-        results = []
-        for query in queries:
-            results.append(self.query(*query, self.depth, self.max_ancestors))
-        return results
-
-"""
-Version initiale de la fonction graph_from_file
+        self.parents = parents
+        self.max_anc = max_anc
+        return None
+    
+    def min_power5(self, src, dest):
+        # Trouver le nœud commun le plus éloigné de src et dest
+        node = self.lca(src, dest)
+        
+        # Calculer la puissance minimale requise pour le chemin de src à node
+        min_power = 0
+        while src != node:
+            max_power = self.max_anc[src][int(log2(self.depth[src] - self.depth[node]))]
+            if max_power > min_power:
+                min_power = max_power
+            src = self.parents[src]
+        
+        # Calculer la puissance minimale requise pour le chemin de node à dest
+        while dest != node:
+            max_power = self.max_anc[dest][int(log2(self.depth[dest] - self.depth[node]))]
+            if max_power > min_power:
+                min_power = max_power
+            dest = self.parents[dest]
+        
+        return min_power
+    
+    def lca(self, node1, node2):
+        """
+        Renvoie le LCA (Least Common Ancestor) des noeuds node1 et node2 dans l'arbre de recouvrement.
+        """
+        # on commence par s'assurer que node1 est plus profond que node2 (ou à la même profondeur)
+        if self.depth[node1] < self.depth[node2]:
+            node1, node2 = node2, node1
+        # on remonte l'arbre depuis node1 jusqu'à un noeud à la même profondeur que node2
+        for i in range(int(log2(self.nb_nodes) + 1), -1, -1):
+            if self.depth[node1] - 2**i >= self.depth[node2]:
+                node1 = self.max_anc[node1][i]
+        # si node1 == node2, alors node1 est le LCA
+        if node1 == node2:
+            return node1
+        # sinon, on continue de remonter jusqu'à ce que node1 et node2 soient tous les deux fils du même noeud
+        for i in range(int(log2(self.nb_nodes)), -1, -1):
+            if self.max_anc[node1][i] != self.max_anc[node2][i]:
+                node1 = self.max_anc[node1][i]
+                node2 = self.max_anc[node2][i]
+        # le LCA est alors le parent commun à node1 et node2
+        return self.parents[node1]
+        
+    
+#QUESTION 1 ET 4:
 
 def graph_from_file(filename):
     with open(filename, "r") as file:
@@ -523,9 +503,7 @@ def graph_from_file(filename):
                 raise Exception("Format incorrect")
     return g
 
-"""
-
-#QUESTION 1 ET 4:
+""" Essai pour régler FAUX PROBLEME fichier routes.i.in
 
 def graph_from_file(filename):
     "Nouvelle version de la fonction graph_from_file car les distances du fichiers routes.10.in sont des floats"
@@ -548,7 +526,7 @@ def graph_from_file(filename):
                 raise Exception("Format incorrect")
     f.close    
     return g
-
+"""
 
 #QUESTION 12: Algorithme de Kruskal et structure Union-Find
 

@@ -1,13 +1,22 @@
 from graph import Graph, graph_from_file, kruskal
 import graphviz, time, random, statistics
+from math import log2
 
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
 file_name = "network.1.in"
 
-"""
+
 g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
-g_mst.dfs14()
+g_mst.min_power(2,10)
+g_mst.dfs15()
+print(g_mst.max_anc)
+print(g_mst.depth)
+for i in range(int(log2(g_mst.nb_nodes) + 1), -1, -1):
+    print(i)
+
+
+"""
 print(g_mst.profondeur[3], g_mst.profondeur[4])
 print(g_mst.min_power4(3,4))
 print(g_mst.min_power1(3,4))
@@ -29,7 +38,7 @@ for i in range (1,11):
             a = random.randint(1,graph.nb_nodes)
             b = random.randint(1,graph.nb_nodes)
         start_time = time.perf_counter()  
-        print(graph.min_power1(a, b))
+        print(graph.min_power(a, b))
         end_time = time.perf_counter()
         execution_time = end_time - start_time
         counter.append(execution_time)
@@ -56,7 +65,7 @@ de poids minimal dans G. Nous en concluons donc que le chemin P doit être enti�
 """
 
 """
-# Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power2
+# Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power4
 
 for i in range (1,11):
     graph = graph_from_file(data_path + "network."+str(i)+".in")
@@ -78,7 +87,7 @@ for i in range (1,11):
         counter.append(execution_time)
     average_speed = statistics.mean(counter)
 
-    print("La vitesse d'exécution moyenne de la méthode min_power2 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
+    print("La vitesse d'exécution moyenne de la méthode min_power4 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
 """
 
 """
