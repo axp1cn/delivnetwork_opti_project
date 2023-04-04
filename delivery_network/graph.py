@@ -574,7 +574,7 @@ class Graph:
                 visited[(route_with_profit[0], route_with_profit[1])] = False
                 path = self.min_power4(route_with_profit[0], route_with_profit[1])[1]
                 sum_distances = 0
-                for i in range(len(path), step = 2):
+                for i in range(0,len(path)-1,2):
                     sum_distances += self.edges_with_powdist[(path[i], path[i+1])][1] #on incrémente par la dist entre le noeud à la place i et le noeud à la place i+1 du path
                 profits[(route_with_profit[0], route_with_profit[1])] = route_with_profit[2] * ((1-epsilon)**(len(path)-1)) - sum_distances*p_carburant #chaque clé correspondant à un trajet (couple de noeud) est associée à son profit
         taken = {i : 0 for i in range(nb_truck_model)} #on suit le nombre de camions utilisés par modèle numéro i

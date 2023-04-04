@@ -9,9 +9,10 @@ file_name = "network.1.in"
 g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
 g_mst.dfs14()
-#print(g_mst.knapsack_greedy_trucks(25e9, 1, 0))
+print(g_mst.knapsack_greedy_trucks(25e9, 1, 0))
+print(g_mst.realistic_knapsack(25e9, 1, 0, 0.01 , 0.001))
 #g_mst.graphic_representation(1,9)
-g_mst.graphic_representation1(25e9, 1, 0)
+#g_mst.graphic_representation1(25e9, 1, 0)
 
 
 """
