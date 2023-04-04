@@ -490,19 +490,33 @@ class Graph:
     taken c'est la liste des camions qu'on a choisi (taken[i] 0 si on choisi le camion i, 1 sinon)""" 
 
     "algorithme greedy du pb du sac à dos, on a pas forcément le profit optimal, mais c'est pas mal et plus rapide"
-    def knapsack_greedy(Budget, coûts, puissances, profits, puissance_min):
-        n = len(coûts)
-        m = len (profits)
-        ratios = [[profits[j] / coûts[i], j, i] for j in range (m) for i in range(n)]
-        ratios.sort(key = lambda x: x[0], reverse=True)
-        total_value = 0
-        taken = [0] * n
-        for (ratio, j, i) in ratios:
-            if coûts[i] <= Budget and puissances[i]>=puissance_min[j]:
-                taken[i] = [1, j]
-                Budget -= coûts[i]
-                total_value += profits[j]
-        return total_value, taken 
+    
+    def knapsack_greedy_trucks(self, budget, routes, catalogue): #routes = numéro du fichier routes.i.in / catalogue = numéro du fichier trucks.i.in
+        path_covered_by_truck = [] #liste qui va contenir l'ensemble des trajets couverts associés au modèle de camion utilisé
+        total_profit = 0
+        with open("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/trucks."+str(catalogue)+".in", "r") as file:
+            nb_truck_model = int(file.readline)
+            trucks = {i : None for i in range (nb_truck_model)} #on choisit d'associer à chaque modèle de camion un numéro i (ordre d'apparition dans le fichier trucks.i.in)
+            for i in range(nb_truck_model):
+                truck_model = list(map(int, file.readline().split()))
+                trucks[i] = truck_model #chaque clé correspondant à un modèle de camion est associée à la puissance et au coût du modèle en question
+        with open("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/routes."+str(routes)+".in", "r") as file:
+            nb_routes = int(file.readline)
+            profits = dict()
+            for i in range(nb_routes):
+                route_with_profit = list(map(int, file.readline().split()))
+                profits[(route_with_profit[0], route_with_profit[1])] = route_with_profit[2] #chaque clé correspondant à un trajet (couple de noeud) est associée à son profit
+        taken = {i : 0 for i in range(nb_truck_model)} #on suit le nombre de camions utilisés par modèle numéro i
+        ratios = [[profits[route]/trucks[truck][1], route, truck] for route in profits for truck in trucks] #on associe le rapport profit/cout à la route et au modèle de camion utilisés
+        ratios.sort(key = lambda x: x[0], reverse=True) #on trie par ordre décroissant du ration profit/cout pour maximiser notre allocation en camions
+        for ratio, route, truck in ratios:
+            if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0]: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
+                taken[truck] += 1
+                budget -= trucks[truck][1]
+                total_profit += profits[route]
+                path_covered_by_truck.append([route, truck])
+        return total_profit, taken, path_covered_by_truck
+
     
     """on pourrait faire un algorithme de programmation dynamique du pb du sac à dos, 
     il renvoie le profit optimal et les camions choisis mais il est plus couteux"""
