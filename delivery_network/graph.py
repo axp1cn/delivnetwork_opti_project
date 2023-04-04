@@ -416,6 +416,7 @@ class Graph:
 
     #QUESTION 16:
 
+    "mettre dans max_anc ancetre à 2^i de profondeur associé à puissiance minimale (pour l'instant que puissance min)"
     def dfs15(self, root=None, visited=None, depth=None, parents=None, max_anc=None):
         if visited is None and depth is None and parents is None and max_anc is None:
             visited=set()
