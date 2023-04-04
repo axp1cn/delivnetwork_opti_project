@@ -483,28 +483,28 @@ class Graph:
                 node2 = self.max_anc[node2][i]
         # le LCA est alors le parent commun à node1 et node2
         return self.parents[node1]
-    """coûts c'est la liste des coûts de chaque camions, profit c'est le liste des profits de chaque chemin 
+    #question 18
+    """coûts c'est la liste des coûts de chaque camions, puissance la liste des puissances de chaque camions,
+    profits c'est le liste des profits de chaque chemin , puissance_min la liste des puissances minimales 
+    de chaque chemin(trouvée avec min_power4)
     taken c'est la liste des camions qu'on a choisi (taken[i] 0 si on choisi le camion i, 1 sinon)"""
-    def knapsack_greedy(Budget, coûts, puissance, profits, puissance_min):
+    "algorithme du pb du sac à dos"
+    def knapsack(Budget, coûts, puissances, profits, puissance_min):
         n = len(coûts)
         m = len (profits)
         ratios=[0] * m
         for j in range (m):
-            ratios[j] = [(profits[j] / coûts[i], i) for i in range(n)]
-        ratios.sort(reverse=True)
+            ratios = [[profits[j] / coûts[i], j, i] for j in range (m) for i in range(n)]
+            ratios.sort(key = lambda x: x[0], reverse=True)
         total_value = 0
         taken = [0] * n
-        j=0
-        while j<m:
-            t=0
-            for (ratio, i) in ratios[j]:
-                if coûts[i] <= Budget and puissance[i]>=puissance_min[j] and taken [i]!=1 and t==0:
-                    taken[i] = 1
-                    Budget -= coûts[i]
-                    total_value += profits[j]
-                    t=1
-            j=j+1
+        for (ratio, j, i) in ratios:
+            if coûts[i] <= Budget:
+                taken[i] = 1
+                Budget -= coûts[i]
+                total_value += profits[i]
         return total_value, taken
+
     
 #QUESTION 1 ET 4:
 
