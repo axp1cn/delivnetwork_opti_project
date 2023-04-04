@@ -483,13 +483,8 @@ class Graph:
                 node2 = self.max_anc[node2][i]
         # le LCA est alors le parent commun à node1 et node2
         return self.parents[node1]
-    #question 18
-    """coûts c'est la liste des coûts de chaque camions, puissance la liste des puissances de chaque camions,
-    profits c'est le liste des profits de chaque chemin , puissance_min la liste des puissances minimales 
-    de chaque chemin(trouvée avec min_power4)
-    taken c'est la liste des camions qu'on a choisi (taken[i] 0 si on choisi le camion i, 1 sinon)""" 
-
-    "algorithme greedy du pb du sac à dos, on a pas forcément le profit optimal, mais c'est pas mal et plus rapide"
+    
+    #QUESTION 18: Algorithme greedy du problème du sac à dos (on a pas forcément le profit optimal, mais c'est pas mal et plus rapide)
     
     def knapsack_greedy_trucks(self, budget, routes, catalogue): #routes = numéro du fichier routes.i.in / catalogue = numéro du fichier trucks.i.in
         path_covered_by_truck = [] #liste qui va contenir l'ensemble des trajets couverts associés au modèle de camion utilisé
@@ -517,6 +512,28 @@ class Graph:
                 path_covered_by_truck.append([route, truck])
         return total_profit, taken, path_covered_by_truck
 
+    #QUESTION 19: Modélisation graphique de l'allocation en camions
+
+    """On implémente une méthode de représentation graphique en utilisant le module graphviz, on affiche les trajets desservis, associés au modèle de camion
+    utilisé respectivement."""
+
+    def graphic_representation(self, budget, routes, catalogue):
+        repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
+        alloc = self.knapsack_greedy_trucks(budget, routes, catalogue)[2]
+        graph = self.graph
+        "on affiche les noeuds et les arêtes"
+        for node, neighbors in graph.items():
+            repr.node(str(node), style = "filled", color = "lightblue")
+            for neighbor in neighbors:
+                    repr.edge(str(node), str(neighbor), constraint='true')
+        "on affiche en rouge le chemin solution de la question 6"
+        if alloc != []:
+            for route, truck in alloc :
+                repr.node(str(route[0]), style = "filled", color = "red")
+                repr.node(str(route[1]), style = "filled", color = "red")
+                repr.edge(str(route[0]), str(route[1]), label="Modèle "+str(truck), color ="red", fontcolor ="red", constraint='true')
+        repr.view()
+        return None
     
     """on pourrait faire un algorithme de programmation dynamique du pb du sac à dos, 
     il renvoie le profit optimal et les camions choisis mais il est plus couteux"""
