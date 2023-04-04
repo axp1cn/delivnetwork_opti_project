@@ -487,24 +487,46 @@ class Graph:
     """coûts c'est la liste des coûts de chaque camions, puissance la liste des puissances de chaque camions,
     profits c'est le liste des profits de chaque chemin , puissance_min la liste des puissances minimales 
     de chaque chemin(trouvée avec min_power4)
-    taken c'est la liste des camions qu'on a choisi (taken[i] 0 si on choisi le camion i, 1 sinon)"""
-    "algorithme greedy du pb du sac à dos"
+    taken c'est la liste des camions qu'on a choisi (taken[i] 0 si on choisi le camion i, 1 sinon)""" 
+
+    "algorithme greedy du pb du sac à dos, on a pas forcément le profit optimal, mais c'est pas mal et plus rapide"
     def knapsack_greedy(Budget, coûts, puissances, profits, puissance_min):
         n = len(coûts)
         m = len (profits)
-        ratios=[0] * m
-        for j in range (m):
-            ratios = [[profits[j] / coûts[i], j, i] for j in range (m) for i in range(n)]
-            ratios.sort(key = lambda x: x[0], reverse=True)
+        ratios = [[profits[j] / coûts[i], j, i] for j in range (m) for i in range(n)]
+        ratios.sort(key = lambda x: x[0], reverse=True)
         total_value = 0
         taken = [0] * n
         for (ratio, j, i) in ratios:
-            if coûts[i] <= Budget:
+            if coûts[i] <= Budget and puissances[i]>=puissance_min[j]:
                 taken[i] = [1, j]
                 Budget -= coûts[i]
-                total_value += profits[i]
+                total_value += profits[j]
         return total_value, taken 
+    
+    """on pourrait faire un algorithme de programmation dynamique du pb du sac à dos, 
+    il renvoie le profit optimal et les camions choisis mais il est plus couteux"""
 
+    #question 20
+    """on réécrit le même algorithme mais cette fois le profit est l'esperance du profit en prenant en compte le risque que la route
+    casse et le coût de carburant"""
+    """il faut une liste distances donnant la distance totale pour chaque trajet, mais en fait c'est à calculer dans l'algorithme"""
+    def knapsack_proba(Budget, coûts, puissances, profits, p_carburant , epsilon, distances, puissance_min):
+        n = len(coûts)
+        m = len (profits)
+        benefice=[0]*(m)
+        for j in range (m):
+            benefice[j]=[profits[j]*(1- epsilon )-distances[j]*p_carburant]
+        ratios = [[benefice[j] / coûts[i], j, i] for j in range (m) for i in range(n)]
+        ratios.sort(key = lambda x: x[0], reverse=True)
+        total_value = 0
+        taken = [0] * n
+        for (ratio, j, i) in ratios:
+            if coûts[i] <= Budget and puissances[i]>=puissance_min[j]:
+                taken[i] = [1, j]
+                Budget -= coûts[i]
+                total_value += benefice[j]
+        return total_value, taken 
     
 #QUESTION 1 ET 4:
 
