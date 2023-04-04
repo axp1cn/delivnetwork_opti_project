@@ -500,10 +500,10 @@ class Graph:
         taken = [0] * n
         for (ratio, j, i) in ratios:
             if coûts[i] <= Budget:
-                taken[i] = 1
+                taken[i] = [1, j]
                 Budget -= coûts[i]
                 total_value += profits[i]
-        return total_value, taken
+        return total_value, taken 
 
     
 #QUESTION 1 ET 4:
