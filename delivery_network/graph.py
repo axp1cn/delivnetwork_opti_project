@@ -28,7 +28,8 @@ class Graph:
         self.graph = dict([(n, []) for n in nodes])
         self.nb_nodes = len(nodes)
         self.nb_edges = 0
-        self.edges = dict() #on crée un dictionnaire plutôt qu'une liste (code de base)
+        self.edges = []
+        self.edges_with_powdist = dict()
         self.weight = dict()
         "on ajoute des attributs nécessaires aux questions 14 et 16"
         self.depth = dict()
@@ -66,16 +67,16 @@ class Graph:
 
         self.graph[node1].append((node2, power_min, dist))
         self.graph[node2].append((node1, power_min, dist))
-        self.get_edge(self, node1, node2, power_min, dist) #On ajoute l'arête (noeud1-noeud2) associée à le puissance min et la distance
-        self.get_edge(self, node2, node1, power_min, dist) #On fait de même pour (noeud2-noeud1) qui la même que celle ajoutée précédemment mais c'est plus simple pour la dernière question pour retrouver dist
+        self.edges_with_powdist[(node1, node2)] = (power_min, dist) #On ajoute l'arête (noeud1-noeud2) associée à le puissance min et la distance
+        self.edges_with_powdist[(node2, node1)] = (power_min, dist) #On fait de même pour (noeud2-noeud1) qui la même que celle ajoutée précédemment mais c'est plus simple pour la dernière question pour retrouver dist
 
         self.nb_edges += 1
 
         return None
     
-        
-    def get_edge(self, node1, node2, power_min, dist): 
-        self.edges[(node1, node2)] = (power_min, dist)
+    "Ci-dessous, une méthode pas très utile car pourrait être intégrée dans add_edge mais on a envie de garder la structure de code initiale "
+    def get_edge(self, node1, node2, power_min): 
+        self.edges.append((node1, node2, power_min))
 
     #QUESTION 2:
     """  Etant donné un graphe, on va créer dans cette méthode la liste des composantes connexes"""
@@ -201,7 +202,7 @@ class Graph:
     #QUESTION 7:
     """On implémente une méthode de représentation graphique en utilisant le module graphviz, on affiche en rouge le chemin ayant 
     la puissance minimale qu'on a trouvé à la question 6"""
-    def graphic_representation(self, src, dest, power):
+    def graphic_representation(self, src, dest):
         repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
         """si le graphe n'a pas de cycle et est connexe (arbre) on utilise le min_power2 du TD 2, si le graphe n'est pas 
         un arbre on utilise min_power de la question 6"""
@@ -494,23 +495,26 @@ class Graph:
         path_covered_by_truck = [] #liste qui va contenir l'ensemble des trajets couverts associés au modèle de camion utilisé
         total_profit = 0
         with open("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/trucks."+str(catalogue)+".in", "r") as file:
-            nb_truck_model = int(file.readline)
+            nb_truck_model = int(file.readline())
             trucks = {i : None for i in range (nb_truck_model)} #on choisit d'associer à chaque modèle de camion un numéro i (ordre d'apparition dans le fichier trucks.i.in)
             for i in range(nb_truck_model):
                 truck_model = list(map(int, file.readline().split()))
                 trucks[i] = truck_model #chaque clé correspondant à un modèle de camion est associée à la puissance et au coût du modèle en question
         with open("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/routes."+str(routes)+".in", "r") as file:
-            nb_routes = int(file.readline)
+            nb_routes = int(file.readline())
+            visited = dict()
             profits = dict()
             for i in range(nb_routes):
                 route_with_profit = list(map(int, file.readline().split()))
                 profits[(route_with_profit[0], route_with_profit[1])] = route_with_profit[2] #chaque clé correspondant à un trajet (couple de noeud) est associée à son profit
+                visited[(route_with_profit[0], route_with_profit[1])] = False
         taken = {i : 0 for i in range(nb_truck_model)} #on suit le nombre de camions utilisés par modèle numéro i
         ratios = [[profits[route]/trucks[truck][1], route, truck] for route in profits for truck in trucks] #on associe le rapport profit/cout à la route et au modèle de camion utilisés
         ratios.sort(key = lambda x: x[0], reverse=True) #on trie par ordre décroissant du ration profit/cout pour maximiser notre allocation en camions
         for ratio, route, truck in ratios:
-            if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0]: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
+            if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0] and visited[route] == False: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
                 taken[truck] += 1
+                visited[route] = True
                 budget -= trucks[truck][1]
                 total_profit += profits[route]
                 path_covered_by_truck.append([route, truck])
@@ -521,56 +525,65 @@ class Graph:
     """On implémente une méthode de représentation graphique en utilisant le module graphviz, on affiche les trajets desservis, associés au modèle de camion
     utilisé respectivement."""
 
-    def graphic_representation(self, budget, routes, catalogue):
+    def graphic_representation1(self, budget, routes, catalogue):
         repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
         alloc = self.knapsack_greedy_trucks(budget, routes, catalogue)[2]
         graph = self.graph
         "on affiche les noeuds et les arêtes"
         for node, neighbors in graph.items():
             repr.node(str(node), style = "filled", color = "lightblue")
-            for neighbor in neighbors:
+            for neighbor,power_min,dist in neighbors:
                     repr.edge(str(node), str(neighbor), constraint='true')
-        "on affiche en rouge le chemin solution de la question 6"
-        if alloc != []:
+        "on affiche en rouge les chemins empruntés pour les camions"
+        if alloc != None:
             for route, truck in alloc :
                 repr.node(str(route[0]), style = "filled", color = "red")
                 repr.node(str(route[1]), style = "filled", color = "red")
-                repr.edge(str(route[0]), str(route[1]), label="Modèle "+str(truck), color ="red", fontcolor ="red", constraint='true')
+                path = self.min_power4(route[0],route[1])[1]
+                for i in range(0, len(path)-1):
+                    node1 = path[i]
+                    node2 = path[i+1]
+
+                    repr.edge(str(node1), str(node2), label="Modèle "+str(truck), color ="red", fontcolor ="red", constraint='true')
         repr.view()
         return None
     
     """on pourrait faire un algorithme de programmation dynamique du pb du sac à dos, 
     il renvoie le profit optimal et les camions choisis mais il est plus couteux"""
 
-    #question 20
-    """on réécrit le même algorithme mais cette fois le profit est l'esperance du profit en prenant en compte le risque que la route
+    #QUESTION 20: Ajout de réalisme à la Q18 avec une proba de blocaque de route et un coût de carburant proportionnel à la distance du chemin emprunté
+
+    """On réécrit le même algorithme mais cette fois le profit est l'esperance du profit en prenant en compte le risque que la route
     casse et le coût de carburant"""
-    """il faut une liste distances donnant la distance totale pour chaque trajet, mais en fait c'est à calculer dans l'algorithme"""
+
     def realistic_knapsack(self, budget, routes, catalogue, p_carburant , epsilon): #routes = numéro du fichier routes.i.in / catalogue = numéro du fichier trucks.i.in
         path_covered_by_truck = [] #liste qui va contenir l'ensemble des trajets couverts associés au modèle de camion utilisé
         total_profit = 0
         with open("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/trucks."+str(catalogue)+".in", "r") as file:
-            nb_truck_model = int(file.readline)
+            nb_truck_model = int(file.readline())
             trucks = {i : None for i in range (nb_truck_model)} #on choisit d'associer à chaque modèle de camion un numéro i (ordre d'apparition dans le fichier trucks.i.in)
             for i in range(nb_truck_model):
                 truck_model = list(map(int, file.readline().split()))
                 trucks[i] = truck_model #chaque clé correspondant à un modèle de camion est associée à la puissance et au coût du modèle en question
         with open("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/routes."+str(routes)+".in", "r") as file:
-            nb_routes = int(file.readline)
+            nb_routes = int(file.readline())
             profits = dict()
+            visited = dict()
             for i in range(nb_routes):
                 route_with_profit = list(map(int, file.readline().split()))
+                visited[(route_with_profit[0], route_with_profit[1])] = False
                 path = self.min_power4(route_with_profit[0], route_with_profit[1])[1]
                 sum_distances = 0
                 for i in range(len(path), step = 2):
-                    sum_distances += self.edges[(path[i], path[i+1])][1] #on incrémente par la dist entre le noeud à la place i et le noeud à la place i+1 du path
+                    sum_distances += self.edges_with_powdist[(path[i], path[i+1])][1] #on incrémente par la dist entre le noeud à la place i et le noeud à la place i+1 du path
                 profits[(route_with_profit[0], route_with_profit[1])] = route_with_profit[2] * ((1-epsilon)**(len(path)-1)) - sum_distances*p_carburant #chaque clé correspondant à un trajet (couple de noeud) est associée à son profit
         taken = {i : 0 for i in range(nb_truck_model)} #on suit le nombre de camions utilisés par modèle numéro i
         ratios = [[profits[route]/trucks[truck][1], route, truck] for route in profits for truck in trucks] #on associe le rapport profit/cout à la route et au modèle de camion utilisés
         ratios.sort(key = lambda x: x[0], reverse=True) #on trie par ordre décroissant du ration profit/cout pour maximiser notre allocation en camions
         for ratio, route, truck in ratios:
-            if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0]: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
+            if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0] and visited[route] == False: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
                 taken[truck] += 1
+                visited[route] = True
                 budget -= trucks[truck][1]
                 total_profit += profits[route]
                 path_covered_by_truck.append([route, truck])
