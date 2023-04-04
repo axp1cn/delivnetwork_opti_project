@@ -488,8 +488,8 @@ class Graph:
     profits c'est le liste des profits de chaque chemin , puissance_min la liste des puissances minimales 
     de chaque chemin(trouvée avec min_power4)
     taken c'est la liste des camions qu'on a choisi (taken[i] 0 si on choisi le camion i, 1 sinon)"""
-    "algorithme du pb du sac à dos"
-    def knapsack(Budget, coûts, puissances, profits, puissance_min):
+    "algorithme greedy du pb du sac à dos"
+    def knapsack_greedy(Budget, coûts, puissances, profits, puissance_min):
         n = len(coûts)
         m = len (profits)
         ratios=[0] * m
