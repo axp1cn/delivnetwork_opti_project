@@ -417,7 +417,7 @@ class Graph:
     #QUESTION 16:
 
     "mettre dans max_anc ancetre à 2^i de profondeur associé à puissiance minimale (pour l'instant que puissance min)"
-    def dfs15(self, root=None, visited=None, depth=None, parents=None, max_anc=None):
+    def dfs16(self, root=None, visited=None, depth=None, parents=None, max_anc=None):
         if visited is None and depth is None and parents is None and max_anc is None:
             visited=set()
             depth=dict()
@@ -439,6 +439,7 @@ class Graph:
         self.parents = parents
         self.max_anc = max_anc
         return None
+    
     
     def min_power5(self, src, dest):
         # Trouver le nœud commun le plus éloigné de src et dest
@@ -482,7 +483,28 @@ class Graph:
                 node2 = self.max_anc[node2][i]
         # le LCA est alors le parent commun à node1 et node2
         return self.parents[node1]
-        
+    """coûts c'est la liste des coûts de chaque camions, profit c'est le liste des profits de chaque chemin 
+    taken c'est la liste des camions qu'on a choisi (taken[i] 0 si on choisi le camion i, 1 sinon)"""
+    def knapsack_greedy(Budget, coûts, puissance, profits, puissance_min):
+        n = len(coûts)
+        m = len (profits)
+        ratios=[0] * m
+        for j in range (m):
+            ratios[j] = [(profits[j] / coûts[i], i) for i in range(n)]
+        ratios.sort(reverse=True)
+        total_value = 0
+        taken = [0] * n
+        j=0
+        while j<m:
+            t=0
+            for (ratio, i) in ratios[j]:
+                if coûts[i] <= Budget and puissance[i]>=puissance_min[j] and taken [i]!=1 and t==0:
+                    taken[i] = 1
+                    Budget -= coûts[i]
+                    total_value += profits[j]
+                    t=1
+            j=j+1
+        return total_value, taken
     
 #QUESTION 1 ET 4:
 
