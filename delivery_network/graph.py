@@ -243,6 +243,8 @@ class Graph:
             parents[root]=root
         visited.add(root)
         index+=1
+        """avec une méthode récurssive (DFS), on parcourt les noeuds du graphe en partant du noeud racine et on stocke respectivement
+        son noeud parent ainsi que sa profondeur par rapport au noeud racine (nombre d'arêtes qui séparent ces noeuds)"""
         for son in self.graph[root]:
             if son[0] not in visited:
                 depth[son[0]]=index
@@ -250,7 +252,8 @@ class Graph:
                 self.dfs14(son[0], depth, parents, visited, index)
             else:
                 pass
-        self.depth = depth
+        "on met à jour les attributs depth et parents de notre classe Graph"
+        self.depth = depth 
         self.parents = parents
         return None
 
@@ -261,6 +264,7 @@ class Graph:
         if self.depth[src]>self.depth[dest]:
             node = src
             path2 = [dest]
+            "on veut que les deux noeuds aient la même profondeur donc on commence par remonter par le plus profond"
             while self.depth[node]!= self.depth[dest]:
                 path1.append(node)
                 node = self.parents[node]
@@ -275,6 +279,7 @@ class Graph:
         else:
             node = dest
             path1 = [src]
+            "on veut que les deux noeuds aient la même profondeur donc on commence par remonter par le plus profond"
             while self.depth[node]!= self.depth[src]:
                 path2.append(node)
                 node = self.parents[node]
@@ -286,6 +291,7 @@ class Graph:
                 node1 = self.parents[node1]
                 path2.append(self.parents[node2])
                 node2 = self.parents[node2]
+        "on retire le dernier noeud de path1 car c'est le même que le dernier de path2 (on évite les doublons dans le path final)"
         path1.pop(-1)
         path=path1+list(reversed(path2))
         "on cherche maintenant à déterminer la puissance minimale requise pour parcourir ce chemin"
@@ -420,7 +426,7 @@ class Graph:
 
     #QUESTION 16:
 
-    "mettre dans max_anc ancetre à 2^i de profondeur associé à puissiance minimale (pour l'instant que puissance min)"
+    "On voudrait mettre dans max_anc, l'ancetre à 2^i de profondeur associé à puissiance minimale (pour l'instant que puissance min)"
     def dfs16(self, root=None, visited=None, depth=None, parents=None, max_anc=None):
         if visited is None and depth is None and parents is None and max_anc is None:
             visited=set()
@@ -446,10 +452,7 @@ class Graph:
     
     
     def min_power5(self, src, dest):
-        # Trouver le nœud commun le plus éloigné de src et dest
-        node = self.lca(src, dest)
-        
-        # Calculer la puissance minimale requise pour le chemin de src à node
+        node = self.lca(src, dest) #on trouve le nœud commun le plus éloigné de src et dest
         min_power = 0
         while src != node:
             max_power = self.max_anc[src][int(log2(self.depth[src] - self.depth[node]))]
@@ -457,7 +460,7 @@ class Graph:
                 min_power = max_power
             src = self.parents[src]
         
-        # Calculer la puissance minimale requise pour le chemin de node à dest
+        "On calcule la puissance minimale requise pour le chemin de node à dest"
         while dest != node:
             max_power = self.max_anc[dest][int(log2(self.depth[dest] - self.depth[node]))]
             if max_power > min_power:
@@ -466,27 +469,23 @@ class Graph:
         
         return min_power
     
+    " On crée une fonction qui renvoie le LCA (Least Common Ancestor) des noeuds node1 et node2."
     def lca(self, node1, node2):
-        """
-        Renvoie le LCA (Least Common Ancestor) des noeuds node1 et node2 dans l'arbre de recouvrement.
-        """
-        # on commence par s'assurer que node1 est plus profond que node2 (ou à la même profondeur)
+        "on commence par s'assurer que node1 est plus profond que node2 (ou à la même profondeur)"
         if self.depth[node1] < self.depth[node2]:
             node1, node2 = node2, node1
-        # on remonte l'arbre depuis node1 jusqu'à un noeud à la même profondeur que node2
+        "on remonte l'arbre depuis node1 jusqu'à un noeud à la même profondeur que node2"
         for i in range(int(log2(self.nb_nodes) + 1), -1, -1):
             if self.depth[node1] - 2**i >= self.depth[node2]:
                 node1 = self.max_anc[node1][i]
-        # si node1 == node2, alors node1 est le LCA
-        if node1 == node2:
+        if node1 == node2: #si node1 == node2, alors node1 est le LCA
             return node1
-        # sinon, on continue de remonter jusqu'à ce que node1 et node2 soient tous les deux fils du même noeud
+        "sinon, on continue de remonter jusqu'à ce que node1 et node2 soient tous les deux fils du même noeud"
         for i in range(int(log2(self.nb_nodes)), -1, -1):
             if self.max_anc[node1][i] != self.max_anc[node2][i]:
                 node1 = self.max_anc[node1][i]
                 node2 = self.max_anc[node2][i]
-        # le LCA est alors le parent commun à node1 et node2
-        return self.parents[node1]
+        return self.parents[node1] #le LCA est alors le parent commun à node1 et node2
     
     #QUESTION 18: Algorithme greedy du problème du sac à dos (on a pas forcément le profit optimal, mais c'est pas mal et plus rapide)
     
