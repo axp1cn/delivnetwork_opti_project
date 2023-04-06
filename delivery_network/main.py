@@ -3,26 +3,28 @@ import graphviz, time, random, statistics
 from math import log2
 
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
-file_name = "network.1.in"
+file_name = "network.10.in"
 
 
 ##### ZONE DE TEST #####
 """
 g = graph_from_file(data_path + file_name)
+print(g.nodes)
 g_mst = kruskal(g)
 g_mst.dfs14()
 print(g_mst.knapsack_greedy_trucks(25e9, 1, 1))
+
 print(g_mst.realistic_knapsack(25e9, 1, 1, 0.01 , 0.001))
 g_mst.graphic_representation(1,9)
 g_mst.graphic_representation1(25e9, 1, 2)
 
-print(g_mst.profondeur[3], g_mst.profondeur[4])
+print(g_mst.depth[3], g_mst.depth[4])
 print(g_mst.min_power4(3,4))
 print(g_mst.min_power1(3,4))
 
 print(g.min_power(4,3))
-g_mst.graphic_representation(5,5,1000)"""
-
+g_mst.graphic_representation(5,5)
+"""
 ##### ZONE DE TEST #####
 
 

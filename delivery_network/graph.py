@@ -30,11 +30,10 @@ class Graph:
         self.nb_edges = 0
         self.edges = []
         self.edges_with_powdist = dict()
-        self.weight = dict()
         "on ajoute des attributs nécessaires aux questions 14 et 16"
         self.depth = dict()
         self.parents = []
-        self.root = 1
+        self.root = 1 #on choisit le noeud 1 comme noeud racine de notre graphe
         self.max_anc = []
     
 
@@ -502,7 +501,7 @@ class Graph:
                 trucks[i] = truck_model #chaque clé correspondant à un modèle de camion est associée à la puissance et au coût du modèle en question
         with open("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/routes."+str(routes)+".in", "r") as file:
             nb_routes = int(file.readline())
-            covered = dict()
+            covered = dict() #on crée ce dictionnaire pour traquer si un trajet a déjà été emprunté ou non
             profits = dict()
             for i in range(nb_routes):
                 route_with_profit = list(map(int, file.readline().split()))
@@ -515,7 +514,7 @@ class Graph:
             if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0] and covered[route] == False: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
                 taken[truck] += 1
                 covered[route] = True
-                budget -= trucks[truck][1]
+                budget -= trucks[truck][1] #on actualise le budget en retirant le coût du camion utilisé
                 total_profit += profits[route]
                 path_covered_by_truck.append([route, truck])
         return total_profit, taken, path_covered_by_truck
@@ -523,7 +522,7 @@ class Graph:
     #QUESTION 19: Modélisation graphique de l'allocation en camions
 
     """On implémente une méthode de représentation graphique en utilisant le module graphviz, on affiche les trajets desservis, associés au modèle de camion
-    utilisé respectivement."""
+    utilisé respectivement. On choisit de représenter le network dans son ensemble (avant passage en arbre couvrant de poids min par kruskal)."""
 
     def graphic_representation1(self, budget, routes, catalogue):
         repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
@@ -568,13 +567,13 @@ class Graph:
         with open("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/routes."+str(routes)+".in", "r") as file:
             nb_routes = int(file.readline())
             profits = dict()
-            covered = dict()
-            fuel_cost = dict()
+            covered = dict() #on crée ce dictionnaire pour traquer si un trajet a déjà été emprunté ou non
+            fuel_cost = dict() #on crée ce dictionnaire pour traquer le coût en carburant associé à chaque trajet (proportionnel à la distance cumulée du chemin emprunté)
             for i in range(nb_routes):
                 route_with_profit = list(map(int, file.readline().split()))
                 covered[(route_with_profit[0], route_with_profit[1])] = False
                 fuel_cost[(route_with_profit[0], route_with_profit[1])] = 0
-                path = self.min_power4(route_with_profit[0], route_with_profit[1])[1]
+                path = self.min_power4(route_with_profit[0], route_with_profit[1])[1] #on récupère le chemin de puissance minimale (liste des noeuds empruntés dans l'ordre)
                 for i in range(0,len(path)-1,2):
                     fuel_cost[(route_with_profit[0], route_with_profit[1])] += self.edges_with_powdist[(path[i], path[i+1])][1] #on incrémente par la dist entre le noeud à la place i et le noeud à la place i+1 du path
                 profits[(route_with_profit[0], route_with_profit[1])] = route_with_profit[2] * ((1-epsilon)**(len(path)-1)) - fuel_cost[(route_with_profit[0], route_with_profit[1])]*p_carburant #chaque clé correspondant à un trajet (couple de noeud) est associée à son profit
@@ -585,13 +584,15 @@ class Graph:
             if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0] and covered[route] == False: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
                 taken[truck] += 1
                 covered[route] = True
-                budget -= (trucks[truck][1]+fuel_cost[(route[0], route[1])])
+                budget -= (trucks[truck][1]+fuel_cost[(route[0], route[1])]) #on actualise le budget en retirant le coût du camion utilisé (prix du camion + prix du carburant)
                 total_profit += profits[route]
                 path_covered_by_truck.append([route, truck])
         return total_profit, taken, path_covered_by_truck
     
     
 #QUESTION 1 ET 4:
+
+"""Version initiale de la fonction graph_from_file
 
 def graph_from_file(filename):
     with open(filename, "r") as file:
@@ -610,31 +611,29 @@ def graph_from_file(filename):
             else:
                 raise Exception("Format incorrect")
     return g
+"""
 
-""" Essai pour régler FAUX PROBLEME fichier routes.i.in
+#Nouvelle version de la fonction graph_from_file car les distances du fichier network.10.in sont des floats et non des ints.
 
 def graph_from_file(filename):
-    "Nouvelle version de la fonction graph_from_file car les distances du fichiers routes.10.in sont des floats"
-    f = open(filename, "r")
-    with f as file:
-        n, m = map(int, f.readline().split())
+    with open(filename, "r") as file:
+        n, m = map(int, file.readline().split())
         g = Graph(list(range(1, n+1)))
-        lines = f.readlines()
+        lines = file.readlines()
         for i in range(len(lines)):
             lines[i] = lines[i].split()
             if len(lines[i]) == 3:
                 node1, node2, power_min = lines[i]
-                g.add_edge(int(node1), int(node2), int(power_min)) # will add dist=1 by default
+                g.add_edge(int(node1), int(node2), int(power_min)) #la distance sera initialisée à 1 dans la méthode add_edge
                 g.get_edge(int(node1), int(node2), int(power_min))
             elif len(lines[i]) == 4:
                 node1, node2, power_min, dist = lines[i]
-                g.add_edge(int(node1), int(node2), int(power_min), float(dist))
+                g.add_edge(int(node1), int(node2), int(power_min), float(dist)) #prise en compte de la distance en float du network.10.in
                 g.get_edge(int(node1), int(node2), int(power_min))
             else:
-                raise Exception("Format incorrect")
-    f.close    
+                raise Exception("Format incorrect")  
     return g
-"""
+
 
 #QUESTION 12: Algorithme de Kruskal et structure Union-Find
 
