@@ -3,7 +3,7 @@ import graphviz, time, random, statistics
 from math import log2
 
 data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/"
-file_name = "network.10.in"
+file_name = "network.1.in"
 
 
 ##### ZONE DE TEST #####

@@ -424,68 +424,7 @@ class Graph:
         return path
     
 
-    #QUESTION 16:
-
-    "On voudrait mettre dans max_anc, l'ancetre à 2^i de profondeur associé à puissiance minimale (pour l'instant que puissance min)"
-    def dfs16(self, root=None, visited=None, depth=None, parents=None, max_anc=None):
-        if visited is None and depth is None and parents is None and max_anc is None:
-            visited=set()
-            depth=dict()
-            parents=[0 for i in self.nodes]
-            root = self.root
-            depth[root]=0
-            parents[root]=root
-            max_anc = [[0] * (int(log2(self.nb_nodes))+1) for i in range(self.nb_nodes + 1)]
-        visited.add(root)
-        for son in self.graph[root]:
-            if son[0] not in visited:
-                depth[son[0]] = depth[root] + 1
-                parents[son[0]] = root
-                max_anc[son[0]][0] = son[1]  # poids de l'arête entre le sommet courant et son fils
-                for i in range(1, int(log2(self.nb_nodes)) + 1):
-                    max_anc[son[0]][i] = max(max_anc[son[0]][i-1], max_anc[parents[son[0]]][i-1])
-                self.dfs15(son[0], visited, depth, parents, max_anc)
-        self.depth = depth
-        self.parents = parents
-        self.max_anc = max_anc
-        return None
-    
-    
-    def min_power5(self, src, dest):
-        node = self.lca(src, dest) #on trouve le nœud commun le plus éloigné de src et dest
-        min_power = 0
-        while src != node:
-            max_power = self.max_anc[src][int(log2(self.depth[src] - self.depth[node]))]
-            if max_power > min_power:
-                min_power = max_power
-            src = self.parents[src]
-        
-        "On calcule la puissance minimale requise pour le chemin de node à dest"
-        while dest != node:
-            max_power = self.max_anc[dest][int(log2(self.depth[dest] - self.depth[node]))]
-            if max_power > min_power:
-                min_power = max_power
-            dest = self.parents[dest]
-        
-        return min_power
-    
-    " On crée une fonction qui renvoie le LCA (Least Common Ancestor) des noeuds node1 et node2."
-    def lca(self, node1, node2):
-        "on commence par s'assurer que node1 est plus profond que node2 (ou à la même profondeur)"
-        if self.depth[node1] < self.depth[node2]:
-            node1, node2 = node2, node1
-        "on remonte l'arbre depuis node1 jusqu'à un noeud à la même profondeur que node2"
-        for i in range(int(log2(self.nb_nodes) + 1), -1, -1):
-            if self.depth[node1] - 2**i >= self.depth[node2]:
-                node1 = self.max_anc[node1][i]
-        if node1 == node2: #si node1 == node2, alors node1 est le LCA
-            return node1
-        "sinon, on continue de remonter jusqu'à ce que node1 et node2 soient tous les deux fils du même noeud"
-        for i in range(int(log2(self.nb_nodes)), -1, -1):
-            if self.max_anc[node1][i] != self.max_anc[node2][i]:
-                node1 = self.max_anc[node1][i]
-                node2 = self.max_anc[node2][i]
-        return self.parents[node1] #le LCA est alors le parent commun à node1 et node2
+    #QUESTION 16: Les essais ne sont pas concluants, nous n'avons pas réussi à faire le pré-process demandé
     
     #QUESTION 18: Algorithme greedy du problème du sac à dos (on a pas forcément le profit optimal, mais c'est pas mal et plus rapide)
     
