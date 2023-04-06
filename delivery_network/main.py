@@ -6,16 +6,16 @@ data_path = "/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/
 file_name = "network.1.in"
 
 
+##### ZONE DE TEST #####
+"""
 g = graph_from_file(data_path + file_name)
 g_mst = kruskal(g)
 g_mst.dfs14()
-print(g_mst.knapsack_greedy_trucks(25e9, 1, 0))
-print(g_mst.realistic_knapsack(25e9, 1, 0, 0.01 , 0.001))
-#g_mst.graphic_representation(1,9)
-#g_mst.graphic_representation1(25e9, 1, 0)
+print(g_mst.knapsack_greedy_trucks(25e9, 1, 1))
+print(g_mst.realistic_knapsack(25e9, 1, 1, 0.01 , 0.001))
+g_mst.graphic_representation(1,9)
+g_mst.graphic_representation1(25e9, 1, 2)
 
-
-"""
 print(g_mst.profondeur[3], g_mst.profondeur[4])
 print(g_mst.min_power4(3,4))
 print(g_mst.min_power1(3,4))
@@ -23,10 +23,12 @@ print(g_mst.min_power1(3,4))
 print(g.min_power(4,3))
 g_mst.graphic_representation(5,5,1000)"""
 
+##### ZONE DE TEST #####
 
-# Question 10 : Calcul de la vitesse d'exécution du code développé dans la séance 1, en particulier la méthode min_power
+
+#QUESTION 10: Calcul de la vitesse d'exécution du code développé dans la séance 1, en particulier la méthode min_power
+
 """
-
 for i in range (1,11):
     graph = graph_from_file(data_path + "network."+str(i)+".in")
     counter = []
@@ -43,11 +45,11 @@ for i in range (1,11):
         counter.append(execution_time)
     average_speed = statistics.mean(counter)
 
-    print("La vitesse d'exécution moyenne de la méthode min_power pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
-
+    print("La vitesse d'exécution moyenne de la méthode min_power pour le fichier network.{}.in est de {}.".format(i, round(average_speed,3)))
 """
 
-# Question 11 : 
+
+#QUESTION 11: 
 """Soient 1 et 2, deux noeuds de G.
 Soit T le chemin entre les noeuds 1 et 2 dans A, de puissance minimale Tp.
 La puissance minimale pour couvrir le chemin entre 1 et 2 dans G est Pp ayant pour chemin P.
@@ -63,9 +65,9 @@ de poids minimal dans G. Nous en concluons donc que le chemin P doit être enti�
 
 """
 
-"""
-# Question 15 : Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power4
 
+#QUESTION 15: Calcul de la vitesse d'exécution du code développé dans la séance 2, en particulier la méthode min_power4
+"""
 for i in range (1,11):
     graph = graph_from_file(data_path + "network."+str(i)+".in")
     graph = kruskal(graph)
@@ -86,10 +88,10 @@ for i in range (1,11):
         counter.append(execution_time)
     average_speed = statistics.mean(counter)
 
-    print("La vitesse d'exécution moyenne de la méthode min_power4 pour le fichier routes.{}.in est de {}.".format(i, round(average_speed,3)))
-"""
+    print("La vitesse d'exécution moyenne de la méthode min_power4 pour le fichier network.{}.in est de {} secondes.".format(i, round(average_speed,3)))
 
-"""
+"Créons les fichiers routes.i.out"
+
 for i in range (1,11):
     f = open(data_path + "routes."+str(i)+".in", "r")
     g = graph_from_file(data_path + "network."+str(i)+".in")
@@ -97,11 +99,16 @@ for i in range (1,11):
     g.dfs14()
     dest_path = "./input/routes."+str(i)+".out"
     y = open(dest_path, "w")
+    start_time = time.perf_counter()
     lines = f.readlines()
     for j in range(1,len(lines)):
         lines[j] = lines[j].split()
         min_power, path = g.min_power4(int(lines[j][0]), int(lines[j][1]))
         y.write(str(min_power)+"\n")
+    end_time = time.perf_counter()
+    execution_time = end_time - start_time
     f.close()
     y.close()
+
+    print("Le fichier routes.{}.out s'est généré en {} secondes.".format(i, round(execution_time,3)))
 """

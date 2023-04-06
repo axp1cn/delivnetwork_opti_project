@@ -68,18 +68,18 @@ class Graph:
         self.graph[node1].append((node2, power_min, dist))
         self.graph[node2].append((node1, power_min, dist))
         self.edges_with_powdist[(node1, node2)] = (power_min, dist) #On ajoute l'arête (noeud1-noeud2) associée à le puissance min et la distance
-        self.edges_with_powdist[(node2, node1)] = (power_min, dist) #On fait de même pour (noeud2-noeud1) qui la même que celle ajoutée précédemment mais c'est plus simple pour la dernière question pour retrouver dist
+        self.edges_with_powdist[(node2, node1)] = (power_min, dist) #On fait de même pour (noeud2-noeud1) qui la même que celle ajoutée précédemment mais c'est plus pratique pour la dernière question pour retrouver dist (on pourra négliger l'ordre)
 
         self.nb_edges += 1
 
         return None
-    
-    "Ci-dessous, une méthode pas très utile car pourrait être intégrée dans add_edge mais on a envie de garder la structure de code initiale "
+
+    "Cette méthode est utilisée dans graph_from_file et nous permettra de parcourir les arêtes du graphe lorsqu'on va coder l'algorithme de Kruskal"
     def get_edge(self, node1, node2, power_min): 
         self.edges.append((node1, node2, power_min))
 
     #QUESTION 2:
-    """  Etant donné un graphe, on va créer dans cette méthode la liste des composantes connexes"""
+    """Etant donné un graphe, on va créer dans cette méthode la liste des composantes connexes"""
     def connected_components(self):
         """ on crée une liste vide qu'on remplira avec nos composantes(qui sont aussi des listes), et un dictionnaire visited 
         avec pour clef un noeud et pour valeur un booléen désignant si le noeud a été visité ou non"""
@@ -502,19 +502,19 @@ class Graph:
                 trucks[i] = truck_model #chaque clé correspondant à un modèle de camion est associée à la puissance et au coût du modèle en question
         with open("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/routes."+str(routes)+".in", "r") as file:
             nb_routes = int(file.readline())
-            visited = dict()
+            covered = dict()
             profits = dict()
             for i in range(nb_routes):
                 route_with_profit = list(map(int, file.readline().split()))
                 profits[(route_with_profit[0], route_with_profit[1])] = route_with_profit[2] #chaque clé correspondant à un trajet (couple de noeud) est associée à son profit
-                visited[(route_with_profit[0], route_with_profit[1])] = False
+                covered[(route_with_profit[0], route_with_profit[1])] = False
         taken = {i : 0 for i in range(nb_truck_model)} #on suit le nombre de camions utilisés par modèle numéro i
         ratios = [[profits[route]/trucks[truck][1], route, truck] for route in profits for truck in trucks] #on associe le rapport profit/cout à la route et au modèle de camion utilisés
         ratios.sort(key = lambda x: x[0], reverse=True) #on trie par ordre décroissant du ration profit/cout pour maximiser notre allocation en camions
         for ratio, route, truck in ratios:
-            if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0] and visited[route] == False: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
+            if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0] and covered[route] == False: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
                 taken[truck] += 1
-                visited[route] = True
+                covered[route] = True
                 budget -= trucks[truck][1]
                 total_profit += profits[route]
                 path_covered_by_truck.append([route, truck])
@@ -528,7 +528,8 @@ class Graph:
     def graphic_representation1(self, budget, routes, catalogue):
         repr = graphviz.Graph(comment = "Graphe non orienté", strict = True)
         alloc = self.knapsack_greedy_trucks(budget, routes, catalogue)[2]
-        graph = self.graph
+        network = graph_from_file("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/network."+str(routes)+".in")
+        graph = network.graph
         "on affiche les noeuds et les arêtes"
         for node, neighbors in graph.items():
             repr.node(str(node), style = "filled", color = "lightblue")
@@ -537,13 +538,12 @@ class Graph:
         "on affiche en rouge les chemins empruntés pour les camions"
         if alloc != None:
             for route, truck in alloc :
-                repr.node(str(route[0]), style = "filled", color = "red")
-                repr.node(str(route[1]), style = "filled", color = "red")
                 path = self.min_power4(route[0],route[1])[1]
                 for i in range(0, len(path)-1):
                     node1 = path[i]
                     node2 = path[i+1]
-
+                    repr.node(str(node1), style = "filled", color = "red")
+                    repr.node(str(node2), style = "filled", color = "red")
                     repr.edge(str(node1), str(node2), label="Modèle "+str(truck), color ="red", fontcolor ="red", constraint='true')
         repr.view()
         return None
@@ -568,23 +568,24 @@ class Graph:
         with open("/Users/axelpincon/Desktop/ENSAE/S2/Projet Python/projet_prog_ensae/python_project_afp/input/routes."+str(routes)+".in", "r") as file:
             nb_routes = int(file.readline())
             profits = dict()
-            visited = dict()
+            covered = dict()
+            fuel_cost = dict()
             for i in range(nb_routes):
                 route_with_profit = list(map(int, file.readline().split()))
-                visited[(route_with_profit[0], route_with_profit[1])] = False
+                covered[(route_with_profit[0], route_with_profit[1])] = False
+                fuel_cost[(route_with_profit[0], route_with_profit[1])] = 0
                 path = self.min_power4(route_with_profit[0], route_with_profit[1])[1]
-                sum_distances = 0
                 for i in range(0,len(path)-1,2):
-                    sum_distances += self.edges_with_powdist[(path[i], path[i+1])][1] #on incrémente par la dist entre le noeud à la place i et le noeud à la place i+1 du path
-                profits[(route_with_profit[0], route_with_profit[1])] = route_with_profit[2] * ((1-epsilon)**(len(path)-1)) - sum_distances*p_carburant #chaque clé correspondant à un trajet (couple de noeud) est associée à son profit
+                    fuel_cost[(route_with_profit[0], route_with_profit[1])] += self.edges_with_powdist[(path[i], path[i+1])][1] #on incrémente par la dist entre le noeud à la place i et le noeud à la place i+1 du path
+                profits[(route_with_profit[0], route_with_profit[1])] = route_with_profit[2] * ((1-epsilon)**(len(path)-1)) - fuel_cost[(route_with_profit[0], route_with_profit[1])]*p_carburant #chaque clé correspondant à un trajet (couple de noeud) est associée à son profit
         taken = {i : 0 for i in range(nb_truck_model)} #on suit le nombre de camions utilisés par modèle numéro i
         ratios = [[profits[route]/trucks[truck][1], route, truck] for route in profits for truck in trucks] #on associe le rapport profit/cout à la route et au modèle de camion utilisés
         ratios.sort(key = lambda x: x[0], reverse=True) #on trie par ordre décroissant du ration profit/cout pour maximiser notre allocation en camions
         for ratio, route, truck in ratios:
-            if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0] and visited[route] == False: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
+            if trucks[truck][1] <= budget and trucks[truck][0] >= self.min_power4(route[0], route[1])[0] and covered[route] == False: # on veut cout(camion)<=budget et puissance(camion)>=puissance_min(trajet)
                 taken[truck] += 1
-                visited[route] = True
-                budget -= trucks[truck][1]
+                covered[route] = True
+                budget -= (trucks[truck][1]+fuel_cost[(route[0], route[1])])
                 total_profit += profits[route]
                 path_covered_by_truck.append([route, truck])
         return total_profit, taken, path_covered_by_truck
