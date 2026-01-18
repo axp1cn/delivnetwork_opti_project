@@ -46,8 +46,7 @@ htmlcov/
 Thumbs.db
 
 # Data files (excluded from version control)
-data/*.in
-data/*.out
+data/*
 !data/README.md
 
 # Secrets and environment variables
