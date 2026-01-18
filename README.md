@@ -22,10 +22,9 @@ This repository implements a graph-based optimization for delivery network routi
 
 ```
 .
-├── src/
-│   └── delivery_network/    # Core graph algorithms and optimization code
-│       ├── graph.py          # Graph class with MST, path finding, knapsack methods
-│       └── main.py           # Example usage and performance benchmarks
+├── src/ # Core graph algorithms and optimization code
+│   ├── graph.py          # Graph class with MST, path finding knapsack methods
+│   ├── main.py           # Example usage and performance benchmarks
 ├── data/                     # Network and route data files
 │   ├── network.*.in          # Graph definitions (nodes, edges, power requirements)
 │   ├── routes.*.in           # Delivery routes with profit values
