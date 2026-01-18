@@ -29,6 +29,7 @@ This repository implements a graph-based optimization for delivery network routi
 │   ├── network.*.in          # Graph definitions (nodes, edges, power requirements)
 │   ├── routes.*.in           # Delivery routes with profit values
 │   └── trucks.*.in           # Truck catalog (power, cost)
+├── reports/                  # PDF academic report
 ├── tests/                    # Unit tests for all major algorithms
 └── install_graphviz.sh       # Graphviz installation script
 
