@@ -91,10 +91,8 @@ python -m pytest tests/
 
 ## Notes / Limitations
 
-- Hardcoded file paths in some methods (e.g., `knapsack_greedy_trucks`) - should be parameterized for production use
 - Greedy knapsack provides approximate solutions; optimal solution would require dynamic programming (exponential complexity)
-- Visualization requires graphviz system dependency
-- Some test data files may be large and are not included in the repository (see `data/README.md`)
+
 
 ## References
 
