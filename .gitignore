@@ -45,10 +45,10 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# Data files (large datasets should not be committed)
-# Uncomment if data files are large:
-# data/*.in
-# data/*.out
+# Data files (excluded from version control)
+data/*.in
+data/*.out
+!data/README.md
 
 # Secrets and environment variables
 .env

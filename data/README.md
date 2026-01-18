@@ -2,6 +2,8 @@
 
 This directory contains input files for the delivery network optimization project.
 
+**Note**: Data files (`*.in`, `*.out`) are excluded from git. Users should provide their own data files or download them separately.
+
 ## File Formats
 
 ### Network Files (`network.*.in`)
