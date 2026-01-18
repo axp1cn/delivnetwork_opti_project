@@ -1,0 +1,9 @@
+# Hide roff/manpage files from GitHub language stats
+*.roff linguist-detectable=false
+*.[1-9] linguist-detectable=false
+man/** linguist-detectable=false
+docs/man/** linguist-detectable=false
+
+data/**/*.in linguist-detectable=false
+data/**/*.out linguist-detectable=false
+data/README.md linguist-detectable=false
