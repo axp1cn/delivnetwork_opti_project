@@ -12,7 +12,7 @@ Graph-based optimization for delivery routing and truck allocation under power a
 - Optional visualization using Graphviz to highlight selected paths and allocations
 
 ## Contributors
-Axel Pincon, Matteo Alquier and Gabriel de Boerdere
+Axel Pincon and Jerome Allier
 
 ## References
 - Kruskal, Joseph B. (1956), *On the shortest spanning subtree of a graph and the traveling salesman problem*
